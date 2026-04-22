@@ -105,6 +105,15 @@ export async function POST(req: Request) {
         `${product.name} x${quantity}`,
         options
       );
+
+      await prisma.order.update({
+        where: { orderNo },
+        data: {
+          paymentTradeNo: paymentIntent.transactionId,
+          paymentChannel: paymentIntent.channel || options?.channel,
+          paymentAmount: paymentIntent.displayAmount ?? paymentIntent.amount,
+        },
+      });
       
       log.info({ orderNo, payUrl: paymentIntent.payUrl }, "Payment initiated");
 
@@ -112,7 +121,8 @@ export async function POST(req: Request) {
         success: true, 
         orderNo, 
         payUrl: paymentIntent.payUrl,
-        qrCode: paymentIntent.qrCode 
+        qrCode: paymentIntent.qrCode,
+        payAmount: paymentIntent.displayAmount ?? paymentIntent.amount,
       });
 
     } catch (payError: any) {

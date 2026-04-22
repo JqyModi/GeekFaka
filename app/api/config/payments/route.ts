@@ -7,7 +7,18 @@ export async function GET() {
   // Fetch settings from DB
   const settings = await prisma.systemSetting.findMany({
     where: {
-      key: { in: ["epay_enabled", "epay_channels", "epay_fee"] } 
+      key: {
+        in: [
+          "epay_enabled",
+          "epay_channels",
+          "epay_fee",
+          "alipay_enabled",
+          "alipay_fee",
+          "vmq_enabled",
+          "vmq_channels",
+          "vmq_fee",
+        ],
+      },
     }
   });
   
@@ -17,6 +28,16 @@ export async function GET() {
   }, {} as Record<string, string>);
 
   const channels = [];
+
+  if (config.alipay_enabled === "true") {
+    channels.push({
+      id: "alipay_f2f",
+      name: "支付宝当面付",
+      icon: "wallet",
+      provider: "alipay",
+      fee: parseFloat(config.alipay_fee || "0"),
+    });
+  }
 
   // EPay Check
   if (config.epay_enabled === "true") {
@@ -34,6 +55,18 @@ export async function GET() {
     }
     if (enabledSubChannels.includes("usdt")) {
       channels.push({ id: "usdt", name: "USDT", icon: "credit-card", provider: "epay", fee });
+    }
+  }
+
+  if (config.vmq_enabled === "true") {
+    const fee = parseFloat(config.vmq_fee || "0");
+    const enabledSubChannels = (config.vmq_channels || "alipay,wxpay").split(",");
+
+    if (enabledSubChannels.includes("alipay")) {
+      channels.push({ id: "vmq_alipay", name: "支付宝个人码", icon: "wallet", provider: "vmq", fee });
+    }
+    if (enabledSubChannels.includes("wxpay")) {
+      channels.push({ id: "vmq_wxpay", name: "微信个人码", icon: "credit-card", provider: "vmq", fee });
     }
   }
 

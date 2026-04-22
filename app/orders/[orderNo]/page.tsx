@@ -16,6 +16,7 @@ interface Order {
   orderNo: string
   email: string | null
   totalAmount: any
+  paymentAmount: any
   status: string
   quantity: number
   paidAt: any
@@ -167,6 +168,10 @@ function LicenseItem({ code, index, format }: { code: string, index: number, for
 export default function OrderPage({ params }: { params: { orderNo: string } }) {
   const { orderNo } = params
   const searchParams = useSearchParams()
+  const qrCode = searchParams.get("qrCode")
+  const paymentProvider = searchParams.get("provider")
+  const payUrl = searchParams.get("payUrl")
+  const payAmount = searchParams.get("payAmount")
   
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
@@ -175,7 +180,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
 
   const fetchOrder = async () => {
     try {
-      const res = await fetch(`/api/orders/${orderNo}`)
+      const res = await fetch(`/api/orders/${orderNo}`, { cache: "no-store" })
       if (res.ok) {
         const data = await res.json()
         setOrder(data)
@@ -210,6 +215,22 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
 
     syncPayment()
   }, [orderNo, searchParams])
+
+  useEffect(() => {
+    const pendingExpired = order
+      ? order.status === "PENDING" && new Date(order.createdAt).getTime() + 30 * 60 * 1000 < Date.now()
+      : false
+
+    if (!order || order.status !== "PENDING" || pendingExpired) {
+      return
+    }
+
+    const intervalId = window.setInterval(() => {
+      void fetchOrder()
+    }, 3000)
+
+    return () => window.clearInterval(intervalId)
+  }, [order, orderNo])
 
   const handleCheckPayment = async () => {
     setChecking(true)
@@ -251,6 +272,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
   }
 
   const isExpired = order.status === "EXPIRED" || (order.status === "PENDING" && new Date(order.createdAt).getTime() + 30 * 60 * 1000 < Date.now());
+  const displayAmount = Number(payAmount || order.paymentAmount || order.totalAmount);
 
   return (
     <div className="min-h-screen bg-background dark text-foreground pb-20">
@@ -293,7 +315,12 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
                 </div>
                 <div className="space-y-1">
                   <span className="text-muted-foreground block uppercase text-[10px] font-bold tracking-widest">支付金额</span>
-                  <span className="font-bold text-xl text-primary font-mono">¥{Number(order.totalAmount).toFixed(2)}</span>
+                  <span className="font-bold text-xl text-primary font-mono">¥{displayAmount.toFixed(2)}</span>
+                  {paymentProvider === "vmq" && displayAmount !== Number(order.totalAmount) && (
+                    <span className="block text-[10px] text-yellow-500">
+                      原订单金额 ¥{Number(order.totalAmount).toFixed(2)}，请按 V免签实付金额付款
+                    </span>
+                  )}
                 </div>
                 <div className="space-y-1">
                   <span className="text-muted-foreground block uppercase text-[10px] font-bold tracking-widest">购买数量</span>
@@ -328,6 +355,41 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
 
              {order.status === "PENDING" && !isExpired && (
                 <div className="text-center p-6 bg-yellow-500/5 text-yellow-600 rounded-xl border border-yellow-500/20 space-y-4">
+                   {qrCode && (paymentProvider === "alipay" || paymentProvider === "epay" || paymentProvider === "vmq") && (
+                     <div className="flex flex-col items-center gap-4">
+                       <p className="text-sm font-bold">
+                         {paymentProvider === "vmq"
+                           ? `请扫码并严格支付 ¥${displayAmount.toFixed(2)}`
+                           : paymentProvider === "epay"
+                             ? "请使用易支付渠道完成扫码支付"
+                             : "请使用支付宝扫码完成支付"}
+                       </p>
+                       <img
+                         src={`https://api.qrserver.com/v1/create-qr-code/?size=260x260&data=${encodeURIComponent(qrCode)}`}
+                         alt="支付二维码"
+                         className="h-[260px] w-[260px] rounded-xl border bg-white p-3"
+                       />
+                       <p className="max-w-md break-all text-xs text-muted-foreground">
+                         如果二维码未显示，可复制二维码链接后用其他设备打开。
+                       </p>
+                       <div className="flex flex-col sm:flex-row gap-3">
+                         <Button
+                           variant="outline"
+                           onClick={() => navigator.clipboard.writeText(qrCode)}
+                         >
+                           复制二维码链接
+                         </Button>
+                         {payUrl && (
+                           <Button
+                             variant="secondary"
+                             onClick={() => window.open(payUrl, "_blank", "noopener,noreferrer")}
+                           >
+                             打开网关支付页
+                           </Button>
+                         )}
+                       </div>
+                     </div>
+                   )}
                    <div className="space-y-2">
                      <p className="font-bold text-sm">付款完成后，请勿关闭此页面</p>
                      <p className="text-xs opacity-80">系统检测到支付成功后将自动展示卡密。</p>

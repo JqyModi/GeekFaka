@@ -160,6 +160,12 @@ export function StoreFront({ categories }: { categories: Category[] }) {
       const selectedChannel = channels.find(c => c.id === paymentMethod)
       const providerName = selectedChannel?.provider || "dummy"
 
+      const selectedPaymentChannel =
+        paymentMethod === "vmq_alipay" ? "alipay" :
+        paymentMethod === "vmq_wxpay" ? "wxpay" :
+        paymentMethod === "wechat" ? "wxpay" :
+        paymentMethod
+
       const payload = {
         productId: selectedProduct.id,
         quantity,
@@ -167,7 +173,7 @@ export function StoreFront({ categories }: { categories: Category[] }) {
         paymentMethod: providerName,
         couponCode: appliedCoupon?.code,
         options: {
-          channel: paymentMethod === "wechat" ? "wxpay" : paymentMethod 
+          channel: selectedPaymentChannel
         }
       }
 
@@ -181,6 +187,24 @@ export function StoreFront({ categories }: { categories: Category[] }) {
       
       if (!res.ok) {
         alert(data.error || "下单失败")
+        return
+      }
+
+      if (data.orderNo) {
+        const target = new URL(`/orders/${data.orderNo}`, window.location.origin)
+        if (data.qrCode) {
+          target.searchParams.set("qrCode", data.qrCode)
+        }
+        if (data.payUrl) {
+          target.searchParams.set("payUrl", data.payUrl)
+        }
+        if (data.payAmount) {
+          target.searchParams.set("payAmount", String(data.payAmount))
+        }
+        if (providerName) {
+          target.searchParams.set("provider", providerName)
+        }
+        window.location.href = target.toString()
         return
       }
 

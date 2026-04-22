@@ -113,6 +113,66 @@ export class EpayProvider implements PaymentAdapter {
     return this.signType === "RSA" ? this.signRSA(params) : this.signMD5(params);
   }
 
+  private async resolveQrCode(payUrl: string) {
+    try {
+      const submitResponse = await fetch(payUrl, {
+        method: "GET",
+        redirect: "manual",
+        cache: "no-store",
+        headers: {
+          "user-agent": "Mozilla/5.0",
+        },
+      });
+
+      const redirectLocation = submitResponse.headers.get("location");
+      let qrPageUrl = redirectLocation
+        ? new URL(redirectLocation, this.apiUrl).toString()
+        : "";
+
+      if (!qrPageUrl) {
+        const submitHtml = await submitResponse.text();
+        const redirectMatch =
+          submitHtml.match(/window\.location(?:\.replace)?\(['"]([^'"]+)['"]\)/i) ||
+          submitHtml.match(/location\.href\s*=\s*['"]([^'"]+)['"]/i);
+
+        if (redirectMatch?.[1]) {
+          qrPageUrl = new URL(redirectMatch[1], this.apiUrl).toString();
+        }
+      }
+
+      if (!qrPageUrl) {
+        log.warn({ payUrl }, "Unable to resolve EPay QR page URL");
+        return undefined;
+      }
+
+      const qrPageResponse = await fetch(qrPageUrl, {
+        method: "GET",
+        cache: "no-store",
+        headers: {
+          "user-agent": "Mozilla/5.0",
+        },
+      });
+      const qrPageHtml = await qrPageResponse.text();
+
+      const qrCodeMatch =
+        qrPageHtml.match(/code_url\s*[:=]\s*['"]([^'"]+)['"]/i) ||
+        qrPageHtml.match(/data-qrcode=['"]([^'"]+)['"]/i) ||
+        qrPageHtml.match(/qrcode\.makeCode\(['"]([^'"]+)['"]\)/i) ||
+        qrPageHtml.match(/(?:https?:)?\/\/qr\.alipay\.com\/[A-Za-z0-9]+/i);
+
+      const qrCode = qrCodeMatch?.[1] || qrCodeMatch?.[0];
+      if (!qrCode) {
+        log.warn({ qrPageUrl }, "Unable to extract EPay QR code content");
+        return undefined;
+      }
+
+      return qrCode.startsWith("//") ? `https:${qrCode}` : qrCode;
+    } catch (error) {
+      log.warn({ err: error, payUrl }, "Resolving EPay QR code failed");
+      return undefined;
+    }
+  }
+
   async createPayment(
     orderNo: string, 
     amount: number, 
@@ -148,14 +208,16 @@ export class EpayProvider implements PaymentAdapter {
     const signature = this.sign(params);
     const queryString = new URLSearchParams({ ...params, sign: signature }).toString();
     const payUrl = `${this.apiUrl}submit.php?${queryString}`;
+    const qrCode = await this.resolveQrCode(payUrl);
 
-    log.info({ orderNo, amount, type, signType: this.signType }, "Payment URL generated");
+    log.info({ orderNo, amount, type, signType: this.signType, hasQrCode: Boolean(qrCode) }, "Payment URL generated");
 
     return {
       orderId: orderNo,
       amount: amount,
       currency: "CNY",
-      payUrl: payUrl
+      payUrl: payUrl,
+      qrCode,
     };
   }
 
@@ -203,5 +265,54 @@ export class EpayProvider implements PaymentAdapter {
       transactionId: params.trade_no,
       raw: data
     };
+  }
+
+  async queryStatus(orderNo: string): Promise<PaymentStatus> {
+    await this.loadConfig();
+
+    if (!this.isEnabled) {
+      throw new Error("Payment channel disabled");
+    }
+
+    if (!this.apiUrl || !this.pid || !this.key) {
+      throw new Error("EPay query configuration incomplete");
+    }
+
+    const params: Record<string, string> = {
+      act: "order",
+      pid: this.pid,
+      key: this.key,
+      out_trade_no: orderNo,
+    };
+
+    const response = await fetch(`${this.apiUrl}api.php?${new URLSearchParams(params).toString()}`, {
+      method: "GET",
+      cache: "no-store",
+      headers: {
+        "user-agent": "Mozilla/5.0",
+        accept: "application/json,text/plain,*/*",
+      },
+    });
+
+    const payload = await response.json().catch(() => null) as
+      | { code?: number; msg?: string; status?: number; trade_status?: string }
+      | null;
+
+    if (!payload || payload.code !== 1) {
+      throw new Error(payload?.msg || "EPay order query failed");
+    }
+
+    const tradeStatus = String(payload.trade_status || payload.status || "");
+    if (tradeStatus === "1" || tradeStatus === "TRADE_SUCCESS") {
+      return PaymentStatus.PAID;
+    }
+    if (tradeStatus === "0" || tradeStatus === "WAIT_BUYER_PAY") {
+      return PaymentStatus.PENDING;
+    }
+    if (tradeStatus === "2" || tradeStatus === "TRADE_CLOSED") {
+      return PaymentStatus.EXPIRED;
+    }
+
+    return PaymentStatus.FAILED;
   }
 }

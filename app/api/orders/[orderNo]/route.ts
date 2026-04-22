@@ -1,6 +1,8 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
+export const dynamic = "force-dynamic";
+
 export async function GET(
   req: Request,
   { params }: { params: { orderNo: string } }
@@ -28,10 +30,15 @@ export async function GET(
     if (order.status !== "PAID") {
       // Create a sanitized order object without licenses
       const { licenses, ...safeOrder } = order;
-      return NextResponse.json({ ...safeOrder, licenses: [] });
+      return NextResponse.json(
+        { ...safeOrder, licenses: [] },
+        { headers: { "Cache-Control": "no-store, no-cache, must-revalidate" } }
+      );
     }
 
-    return NextResponse.json(order);
+    return NextResponse.json(order, {
+      headers: { "Cache-Control": "no-store, no-cache, must-revalidate" },
+    });
   } catch (error) {
     console.error("Fetch order error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

@@ -12,6 +12,8 @@ export interface PaymentIntent {
   payUrl?: string;     // URL to redirect user to
   qrCode?: string;     // QR code content to display
   transactionId?: string; // External transaction ID
+  displayAmount?: number; // Amount users should actually pay, if different from order amount
+  channel?: string;
 }
 
 export interface PaymentCallbackData {

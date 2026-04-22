@@ -75,6 +75,9 @@ model Order {
   quantity      Int       @default(1)
   licenses      License[]
   paymentMethod String?
+  paymentChannel String?
+  paymentTradeNo String?
+  paymentAmount Decimal?
   paidAt        DateTime?
   emailSent     Boolean   @default(false)
   couponId      String?   @unique

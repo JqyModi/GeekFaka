@@ -1,12 +1,18 @@
 import { PaymentAdapter } from "./types";
+import { AlipayProvider } from "./providers/alipay";
 import { EpayProvider } from "./providers/epay";
+import { VmqProvider } from "./providers/vmq";
 
 // Map to hold singleton instances or classes
 const adapters: Record<string, PaymentAdapter> = {};
 
 // Register built-in providers
+const alipayProvider = new AlipayProvider();
+adapters[alipayProvider.name] = alipayProvider;
 const epayProvider = new EpayProvider();
 adapters[epayProvider.name] = epayProvider;
+const vmqProvider = new VmqProvider();
+adapters[vmqProvider.name] = vmqProvider;
 
 export function registerAdapter(adapter: PaymentAdapter) {
   adapters[adapter.name] = adapter;

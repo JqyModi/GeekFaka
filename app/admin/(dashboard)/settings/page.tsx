@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Save, Loader2, ShieldCheck, CreditCard, Settings, CheckCircle2, AlertCircle } from "lucide-react"
+import { Save, Loader2, ShieldCheck, CreditCard, Settings, CheckCircle2, Wallet } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -23,8 +23,21 @@ const EPAY_SUB_CHANNELS = [
   { id: "usdt", label: "USDT" },
 ]
 
+const VMQ_SUB_CHANNELS = [
+  { id: "alipay", label: "支付宝个人码" },
+  { id: "wxpay", label: "微信个人码" },
+]
+
 // Define available providers metadata
 const PROVIDERS = [
+  {
+    id: "alipay",
+    name: "支付宝当面付",
+    description: "直连支付宝官方当面付，生成原生扫码二维码并支持服务端查单",
+    icon: Wallet,
+    statusKey: "alipay_app_id",
+    enabledKey: "alipay_enabled"
+  },
   {
     id: "epay",
     name: "易支付 (EPay)",
@@ -32,6 +45,14 @@ const PROVIDERS = [
     icon: CreditCard,
     statusKey: "epay_api_url", // Keep for completeness
     enabledKey: "epay_enabled" // New key for explicit toggle
+  },
+  {
+    id: "vmq",
+    name: "V免签个人码",
+    description: "直连自建 V免签服务，通过个人收款码监听到账并自动回调发货",
+    icon: ShieldCheck,
+    statusKey: "vmq_base_url",
+    enabledKey: "vmq_enabled"
   },
   // Future providers...
 ]
@@ -309,6 +330,95 @@ export default function SettingsPage() {
         </TabsContent>
       </Tabs>
 
+      <Dialog open={selectedProvider === "alipay"} onOpenChange={(open) => !open && setSelectedProvider(null)}>
+        <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>配置支付宝当面付</DialogTitle>
+            <DialogDescription>
+              请输入支付宝开放平台的当面付参数。系统将使用 `alipay.trade.precreate` 生成扫码二维码。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex items-center justify-between rounded-lg border p-4 bg-muted/20">
+              <div className="space-y-0.5">
+                <Label className="text-base">启用此支付渠道</Label>
+                <p className="text-xs text-muted-foreground">关闭后前台将不展示支付宝当面付</p>
+              </div>
+              <Switch
+                checked={draftConfig.alipay_enabled === "true"}
+                onCheckedChange={(checked) => handleChange("alipay_enabled", String(checked))}
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label>交易手续费率 (%)</Label>
+              <div className="relative">
+                <Input
+                  type="number"
+                  step="0.01"
+                  placeholder="0"
+                  className="pr-8"
+                  value={draftConfig.alipay_fee || ""}
+                  onChange={e => handleChange("alipay_fee", e.target.value)}
+                />
+                <span className="absolute right-3 top-2.5 text-sm text-muted-foreground">%</span>
+              </div>
+              <p className="text-xs text-muted-foreground">0 为不额外收取手续费。</p>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>App ID</Label>
+              <Input
+                value={draftConfig.alipay_app_id || ""}
+                onChange={e => handleChange("alipay_app_id", e.target.value)}
+                placeholder="202100xxxxxxxxxxxx"
+                className="font-mono"
+              />
+            </div>
+
+            <div className="grid gap-2">
+              <Label>网关地址</Label>
+              <Input
+                value={draftConfig.alipay_gateway || "https://openapi.alipay.com/gateway.do"}
+                onChange={e => handleChange("alipay_gateway", e.target.value)}
+                placeholder="https://openapi.alipay.com/gateway.do"
+                className="font-mono"
+              />
+              <p className="text-xs text-muted-foreground">生产环境一般保持默认值即可。</p>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>应用私钥 (Private Key)</Label>
+              <Textarea
+                placeholder="-----BEGIN PRIVATE KEY-----"
+                className="font-mono text-xs h-32"
+                value={draftConfig.alipay_private_key || ""}
+                onChange={e => handleChange("alipay_private_key", e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">支持 PKCS#8 或去掉头尾后的纯 Base64 内容。</p>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>支付宝公钥 (Public Key)</Label>
+              <Textarea
+                placeholder="-----BEGIN PUBLIC KEY-----"
+                className="font-mono text-xs h-32"
+                value={draftConfig.alipay_public_key || ""}
+                onChange={e => handleChange("alipay_public_key", e.target.value)}
+              />
+              <p className="text-xs text-muted-foreground">用于验签支付宝异步通知和查单响应。</p>
+            </div>
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSelectedProvider(null)}>取消</Button>
+            <Button onClick={handleSave} disabled={saving}>
+              {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              保存配置
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
       {/* EPay Configuration Dialog */}
       <Dialog open={selectedProvider === "epay"} onOpenChange={(open) => !open && setSelectedProvider(null)}>
         <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
@@ -445,6 +555,103 @@ export default function SettingsPage() {
                   />
                 </div>
               )}
+          </div>
+          <DialogFooter>
+            <Button variant="outline" onClick={() => setSelectedProvider(null)}>取消</Button>
+            <Button onClick={handleSave} disabled={saving}>
+              {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+              保存配置
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={selectedProvider === "vmq"} onOpenChange={(open) => !open && setSelectedProvider(null)}>
+        <DialogContent className="sm:max-w-[600px] max-h-[85vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>配置 V免签个人码</DialogTitle>
+            <DialogDescription>
+              对接自建 V免签服务，使用个人支付宝/微信收款码监听到账后自动发货。
+            </DialogDescription>
+          </DialogHeader>
+          <div className="grid gap-4 py-4">
+            <div className="flex items-center justify-between rounded-lg border p-4 bg-muted/20">
+              <div className="space-y-0.5">
+                <Label className="text-base">启用此支付渠道</Label>
+                <p className="text-xs text-muted-foreground">关闭后前台将不展示个人码支付</p>
+              </div>
+              <Switch
+                checked={draftConfig.vmq_enabled === "true"}
+                onCheckedChange={(checked) => handleChange("vmq_enabled", String(checked))}
+              />
+            </div>
+
+            <div className="grid gap-3 border rounded-lg p-4">
+              <Label>支持的支付方式</Label>
+              <div className="grid grid-cols-2 gap-4">
+                {VMQ_SUB_CHANNELS.map((sub) => {
+                  const currentChannels = (draftConfig.vmq_channels || "alipay,wxpay").split(",").filter(Boolean)
+                  const isChecked = currentChannels.includes(sub.id)
+
+                  return (
+                    <div key={sub.id} className="flex items-center space-x-2">
+                      <Checkbox
+                        id={`vmq-chan-${sub.id}`}
+                        checked={isChecked}
+                        onCheckedChange={(checked) => {
+                          const newChannels = checked
+                            ? Array.from(new Set([...currentChannels, sub.id]))
+                            : currentChannels.filter(c => c !== sub.id)
+                          handleChange("vmq_channels", newChannels.join(","))
+                        }}
+                      />
+                      <Label htmlFor={`vmq-chan-${sub.id}`} className="font-normal cursor-pointer">
+                        {sub.label}
+                      </Label>
+                    </div>
+                  )
+                })}
+              </div>
+              <p className="text-xs text-muted-foreground">只勾选 V免签服务中已配置收款码和监听的渠道。</p>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>交易手续费率 (%)</Label>
+              <div className="relative">
+                <Input
+                  type="number"
+                  step="0.01"
+                  placeholder="0"
+                  className="pr-8"
+                  value={draftConfig.vmq_fee || ""}
+                  onChange={e => handleChange("vmq_fee", e.target.value)}
+                />
+                <span className="absolute right-3 top-2.5 text-sm text-muted-foreground">%</span>
+              </div>
+              <p className="text-xs text-muted-foreground">仅用于前台展示和计价提示，0 为不额外收取。</p>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>V免签服务地址</Label>
+              <Input
+                placeholder="https://pay.example.com"
+                value={draftConfig.vmq_base_url || ""}
+                onChange={e => handleChange("vmq_base_url", e.target.value)}
+                className="font-mono"
+              />
+              <p className="text-xs text-muted-foreground">不要以斜杠结尾。本地测试可填 http://127.0.0.1:18080。</p>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>通信密钥 Key</Label>
+              <Input
+                type="password"
+                value={draftConfig.vmq_key || ""}
+                onChange={e => handleChange("vmq_key", e.target.value)}
+                className="font-mono"
+              />
+              <p className="text-xs text-muted-foreground">必须与 V免签后台配置的 key 保持一致，用于下单签名和回调验签。</p>
+            </div>
           </div>
           <DialogFooter>
             <Button variant="outline" onClick={() => setSelectedProvider(null)}>取消</Button>
