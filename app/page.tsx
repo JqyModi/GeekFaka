@@ -56,7 +56,7 @@ export default async function Home() {
       }))
     }));
   return (
-    <main className="min-h-screen bg-background dark text-foreground selection:bg-primary selection:text-primary-foreground flex flex-col">
+    <main className="min-h-screen bg-background text-foreground selection:bg-primary selection:text-primary-foreground flex flex-col">
       <Navbar />
       
       {/* Dynamic Announcement (Bar + Popup) */}
@@ -64,7 +64,7 @@ export default async function Home() {
 
       {/* Hero Section - Background Only */}
       <section className="relative overflow-hidden pt-10 pb-6">
-        <div className="absolute top-1/2 left-1/2 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-primary/20 blur-[100px]" />
+        <div className="site-hero-glow absolute top-1/2 left-1/2 -z-10 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full blur-[100px]" />
       </section>
 
       {/* Product Section */}
@@ -73,22 +73,22 @@ export default async function Home() {
       </section>
       
       {/* Info Section */}
-      <section className="py-12 text-center bg-muted/20">
+      <section className="theme-soft-section py-12 text-center">
         <div className="container px-4">
            <p className="mx-auto max-w-xl text-lg text-muted-foreground leading-relaxed">
-            GeekFaka 提供安全、极速的虚拟商品交易体验。<br/>
-            7x24小时无人值守，支付即刻发货。
+            精选 AI 提示词、工作流模板、自动化脚本与数字权益。<br/>
+            下单后自动交付，适合个人创作者、团队提效与内容生产场景。
           </p>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="border-t py-12 text-center text-sm text-muted-foreground bg-muted/10">
+      <footer className="theme-footer border-t py-12 text-center text-sm text-muted-foreground">
         <div className="container mx-auto max-w-6xl px-4 space-y-8">
           <div className="space-y-4">
-            <p>&copy; {new Date().getFullYear()} GeekFaka. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} AI数字资源站. All rights reserved.</p>
             {contactInfo?.value && (
-              <div className="prose prose-sm dark:prose-invert mx-auto opacity-80">
+              <div className="theme-prose prose prose-sm dark:prose-invert mx-auto opacity-80">
                  <ReactMarkdown>{contactInfo.value}</ReactMarkdown>
               </div>
             )}

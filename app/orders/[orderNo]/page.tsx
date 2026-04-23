@@ -52,7 +52,7 @@ function CopyableField({ label, value, icon: Icon }: { label: string, value: str
         <Input 
           readOnly 
           value={value} 
-          className="bg-background/50 font-mono text-sm h-9 border-primary/10 focus-visible:ring-0 focus-visible:border-primary/30" 
+          className="theme-pill font-mono text-sm h-9 border-primary/10 focus-visible:ring-0 focus-visible:border-primary/30" 
         />
         <Button variant="secondary" size="icon" className="h-9 w-9 shrink-0 hover:bg-primary/10 hover:text-primary transition-colors" onClick={handleCopy}>
           {copied ? <Check className="h-3.5 w-3.5 text-green-500" /> : <Copy className="h-3.5 w-3.5" />}
@@ -74,14 +74,14 @@ function LicenseItem({ code, index, format }: { code: string, index: number, for
   // Normal / SINGLE format
   if (format === "SINGLE" || !format) {
     return (
-      <div className="group bg-muted/30 p-4 rounded-xl border border-border/50 hover:border-primary/30 transition-all">
+      <div className="theme-pill group p-4 rounded-xl hover:border-primary/30 transition-all">
         <div className="flex justify-between items-center mb-2">
           <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">卡密 #{index + 1}</span>
           <Button variant="ghost" size="icon" className="h-6 w-6 opacity-0 group-hover:opacity-100" onClick={handleCopyFull}>
             {fullCopied ? <Check className="h-3 w-3 text-green-500" /> : <Copy className="h-3 w-3" />}
           </Button>
         </div>
-        <code className="block bg-background/80 p-4 rounded-lg border font-mono text-lg break-all select-all text-primary font-bold">
+        <code className="theme-card block p-4 rounded-lg font-mono text-lg break-all select-all text-primary font-bold">
           {code}
         </code>
       </div>
@@ -97,7 +97,7 @@ function LicenseItem({ code, index, format }: { code: string, index: number, for
     const icons = [User, ShieldCheck, Mail, Key];
 
     return (
-      <div className="group bg-muted/30 p-5 rounded-xl border border-border/50 hover:border-primary/30 transition-all space-y-4">
+      <div className="theme-pill group p-5 rounded-xl hover:border-primary/30 transition-all space-y-4">
         <div className="flex justify-between items-center">
           <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">账号信息 #{index + 1}</span>
           <Button variant="outline" size="sm" className="h-7 text-[10px] gap-1 px-2 border-primary/20 hover:border-primary/50" onClick={handleCopyFull}>
@@ -121,7 +121,7 @@ function LicenseItem({ code, index, format }: { code: string, index: number, for
     const icons = [CreditCard, Clock, ShieldCheck];
 
     return (
-      <div className="group bg-muted/30 p-5 rounded-xl border border-border/50 hover:border-primary/30 transition-all space-y-4">
+      <div className="theme-pill group p-5 rounded-xl hover:border-primary/30 transition-all space-y-4">
         <div className="flex justify-between items-center">
           <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">虚拟卡信息 #{index + 1}</span>
           <Button variant="outline" size="sm" className="h-7 text-[10px] gap-1 px-2 border-primary/20 hover:border-primary/50" onClick={handleCopyFull}>
@@ -145,7 +145,7 @@ function LicenseItem({ code, index, format }: { code: string, index: number, for
     const icons = [Globe, Hash, User, ShieldCheck];
 
     return (
-      <div className="group bg-muted/30 p-5 rounded-xl border border-border/50 hover:border-primary/30 transition-all space-y-4">
+      <div className="theme-pill group p-5 rounded-xl hover:border-primary/30 transition-all space-y-4">
         <div className="flex justify-between items-center">
           <span className="text-[10px] font-bold uppercase tracking-tighter text-muted-foreground">代理信息 #{index + 1}</span>
           <Button variant="outline" size="sm" className="h-7 text-[10px] gap-1 px-2 border-primary/20 hover:border-primary/50" onClick={handleCopyFull}>
@@ -251,7 +251,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-background dark text-foreground">
+      <div className="min-h-screen bg-background text-foreground">
         <Navbar />
         <div className="container mx-auto max-w-3xl py-20 flex justify-center">
           <Loader2 className="h-8 w-8 animate-spin text-primary" />
@@ -262,7 +262,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
 
   if (!order) {
     return (
-      <div className="min-h-screen bg-background dark text-foreground">
+      <div className="min-h-screen bg-background text-foreground">
         <Navbar />
         <div className="container mx-auto max-w-3xl py-20 text-center">
           <h1 className="text-2xl font-bold">订单不存在</h1>
@@ -275,7 +275,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
   const displayAmount = Number(payAmount || order.paymentAmount || order.totalAmount);
 
   return (
-    <div className="min-h-screen bg-background dark text-foreground pb-20">
+    <div className="min-h-screen bg-background text-foreground pb-20">
       <Navbar />
       <div className="container mx-auto max-w-3xl py-10 px-4">
         {syncing && (
@@ -285,7 +285,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
           </div>
         )}
 
-        <Card className="mb-8 border-border/50 bg-card/50 backdrop-blur shadow-2xl">
+        <Card className="theme-card mb-8 border-border/50 bg-card/50 backdrop-blur">
           <CardHeader className="text-center pb-2">
             <div className="flex justify-center mb-4">
               {order.status === "PAID" ? (
@@ -315,7 +315,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
                 </div>
                 <div className="space-y-1">
                   <span className="text-muted-foreground block uppercase text-[10px] font-bold tracking-widest">支付金额</span>
-                  <span className="font-bold text-xl text-primary font-mono">¥{displayAmount.toFixed(2)}</span>
+                  <span className="theme-price font-bold text-xl font-mono">¥{displayAmount.toFixed(2)}</span>
                   {paymentProvider === "vmq" && displayAmount !== Number(order.totalAmount) && (
                     <span className="block text-[10px] text-yellow-500">
                       原订单金额 ¥{Number(order.totalAmount).toFixed(2)}，请按 V免签实付金额付款
@@ -354,10 +354,10 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
              )}
 
              {order.status === "PENDING" && !isExpired && (
-                <div className="text-center p-6 bg-yellow-500/5 text-yellow-600 rounded-xl border border-yellow-500/20 space-y-4">
+                <div className="theme-highlight-panel text-center p-6 rounded-xl space-y-4">
                    {qrCode && (paymentProvider === "alipay" || paymentProvider === "epay" || paymentProvider === "vmq") && (
                      <div className="flex flex-col items-center gap-4">
-                       <p className="text-sm font-bold">
+                       <p className="theme-price text-sm font-bold">
                          {paymentProvider === "vmq"
                            ? `请扫码并严格支付 ¥${displayAmount.toFixed(2)}`
                            : paymentProvider === "epay"
@@ -375,6 +375,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
                        <div className="flex flex-col sm:flex-row gap-3">
                          <Button
                            variant="outline"
+                           className="theme-outline-button"
                            onClick={() => navigator.clipboard.writeText(qrCode)}
                          >
                            复制二维码链接
@@ -382,6 +383,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
                          {payUrl && (
                            <Button
                              variant="secondary"
+                             className="theme-outline-button"
                              onClick={() => window.open(payUrl, "_blank", "noopener,noreferrer")}
                            >
                              打开网关支付页
@@ -396,7 +398,7 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
                    </div>
                    <Button 
                      variant="outline" 
-                     className="w-full border-yellow-500/50 text-yellow-600 hover:bg-yellow-500/10 hover:text-yellow-700"
+                     className="theme-outline-button w-full"
                      onClick={handleCheckPayment}
                      disabled={checking}
                    >

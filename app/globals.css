@@ -24,9 +24,41 @@
     --input: 240 5.9% 90%;
     --ring: 262.1 83.3% 57.8%;
     --radius: 0.75rem;
+    --page-grid: rgba(128, 128, 128, 0.05);
+    --page-grid-size: 40px 40px;
+    --theme-body-accent-a: transparent;
+    --theme-body-accent-b: transparent;
+    --hero-glow: hsla(262, 83%, 58%, 0.2);
+    --surface-border-strong: hsla(262, 83%, 58%, 0.24);
+    --surface-shadow: 0 24px 60px hsla(262, 83%, 20%, 0.08);
+    --button-shadow: 0 16px 36px hsla(262, 83%, 25%, 0.18);
+    --announcement-bg: hsla(262, 83%, 58%, 0.05);
+    --announcement-border: hsla(262, 83%, 58%, 0.1);
+    --theme-surface-image: none;
+    --theme-announcement-header-bg: hsl(var(--primary) / 0.08);
+    --theme-price-color: hsl(var(--primary));
+    --theme-price-shadow: none;
+    --theme-cta-bg: hsl(var(--primary));
+    --theme-cta-hover-bg: hsl(var(--primary));
+    --theme-cta-text: hsl(var(--primary-foreground));
+    --theme-cta-shadow: none;
+    --theme-icon-bg: hsl(var(--muted));
+    --theme-icon-border: hsl(var(--border));
+    --theme-icon-color: hsl(var(--primary));
+    --theme-icon-shadow: none;
+    --theme-highlight-bg: hsl(var(--primary) / 0.08);
+    --theme-highlight-border: hsl(var(--primary) / 0.22);
+    --footer-bg: hsla(240, 6%, 10%, 0.04);
+    --section-bg: hsla(240, 6%, 10%, 0.06);
+    --prose-body: hsl(var(--muted-foreground));
+    --prose-strong: hsl(var(--foreground));
+    --prose-link: hsl(var(--primary));
   }
- 
-  .dark {
+
+  .dark,
+  .theme-default,
+  .theme-sd,
+  .theme-aicz {
     --background: 240 10% 3.9%;
     --foreground: 0 0% 98%;
     --card: 240 10% 3.9%;
@@ -47,6 +79,107 @@
     --input: 240 3.7% 15.9%;
     --ring: 263.4 70% 50.4%;
   }
+
+  .theme-default {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 263.4 70% 50.4%;
+    --primary-foreground: 210 20% 98%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 263.4 70% 50.4%;
+    --page-grid: rgba(128, 128, 128, 0.05);
+    --page-grid-size: 40px 40px;
+    --hero-glow: hsla(263, 70%, 50%, 0.24);
+    --surface-border-strong: hsla(263, 70%, 50%, 0.22);
+    --surface-shadow: 0 24px 60px hsla(252, 70%, 12%, 0.28);
+    --button-shadow: 0 16px 36px hsla(262, 70%, 18%, 0.24);
+    --announcement-bg: hsla(263, 70%, 50%, 0.06);
+    --announcement-border: hsla(263, 70%, 50%, 0.12);
+    --footer-bg: hsla(240, 6%, 10%, 0.14);
+    --section-bg: hsla(240, 6%, 10%, 0.22);
+    --prose-body: hsl(240 5% 80%);
+    --prose-strong: hsl(var(--foreground));
+    --prose-link: hsl(var(--primary));
+  }
+
+  .theme-sd {
+    --background: 0 0% 8%;
+    --foreground: 48 33% 92%;
+    --card: 0 0% 10%;
+    --card-foreground: 48 33% 92%;
+    --popover: 0 0% 10%;
+    --popover-foreground: 48 33% 92%;
+    --primary: 42 98% 59%;
+    --primary-foreground: 0 0% 6%;
+    --secondary: 0 0% 14%;
+    --secondary-foreground: 48 33% 92%;
+    --muted: 0 0% 13%;
+    --muted-foreground: 40 10% 68%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 48 33% 92%;
+    --border: 30 6% 18%;
+    --input: 30 6% 18%;
+    --ring: 42 98% 59%;
+    --radius: 1rem;
+    --page-grid: rgba(253, 185, 49, 0.06);
+    --page-grid-size: 56px 56px;
+    --hero-glow: hsla(42, 98%, 59%, 0.3);
+    --surface-border-strong: hsla(42, 98%, 59%, 0.24);
+    --surface-shadow: 0 28px 70px hsla(0, 0%, 0%, 0.42);
+    --button-shadow: 0 18px 40px hsla(42, 98%, 30%, 0.24);
+    --announcement-bg: hsla(42, 98%, 59%, 0.08);
+    --announcement-border: hsla(42, 98%, 59%, 0.16);
+    --footer-bg: hsla(0, 0%, 5%, 0.5);
+    --section-bg: hsla(42, 30%, 12%, 0.3);
+    --prose-body: hsl(40 12% 76%);
+    --prose-strong: hsl(48 40% 96%);
+    --prose-link: hsl(var(--primary));
+  }
+
+  .theme-aicz {
+    --background: 240 20% 6%;
+    --foreground: 210 20% 96%;
+    --card: 240 18% 10%;
+    --card-foreground: 210 20% 96%;
+    --popover: 240 18% 10%;
+    --popover-foreground: 210 20% 96%;
+    --primary: 185 100% 50%;
+    --primary-foreground: 240 18% 10%;
+    --secondary: 252 24% 14%;
+    --secondary-foreground: 210 20% 96%;
+    --muted: 240 16% 12%;
+    --muted-foreground: 220 10% 74%;
+    --accent: 278 83% 64%;
+    --accent-foreground: 210 20% 96%;
+    --border: 228 19% 18%;
+    --input: 228 19% 18%;
+    --ring: 185 100% 50%;
+    --radius: 1.25rem;
+    --page-grid: rgba(0, 240, 255, 0.1);
+    --page-grid-size: 50px 50px;
+    --hero-glow: hsla(185, 100%, 50%, 0.28);
+    --surface-border-strong: hsla(185, 100%, 50%, 0.28);
+    --surface-shadow: 0 28px 80px hsla(246, 80%, 8%, 0.48);
+    --button-shadow: 0 0 24px hsla(185, 100%, 50%, 0.24);
+    --announcement-bg: hsla(185, 100%, 50%, 0.08);
+    --announcement-border: hsla(185, 100%, 50%, 0.18);
+    --footer-bg: hsla(240, 30%, 8%, 0.5);
+    --section-bg: hsla(240, 20%, 10%, 0.32);
+    --prose-body: hsl(220 10% 78%);
+    --prose-strong: hsl(210 20% 96%);
+    --prose-link: hsl(var(--primary));
+  }
 }
 
 @layer base {
@@ -59,8 +192,166 @@
   body {
     @apply bg-background text-foreground;
     background-image: 
-      linear-gradient(to right, rgba(128, 128, 128, 0.05) 1px, transparent 1px),
-      linear-gradient(to bottom, rgba(128, 128, 128, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
+      var(--theme-body-accent-a),
+      var(--theme-body-accent-b),
+      linear-gradient(to right, var(--page-grid) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--page-grid) 1px, transparent 1px);
+    background-size: auto, auto, var(--page-grid-size), var(--page-grid-size);
+    background-attachment: fixed;
+  }
+}
+
+@layer components {
+  .site-hero-glow {
+    background: var(--hero-glow);
+    box-shadow: 0 0 80px var(--hero-glow);
+  }
+
+  .theme-card {
+    background-image: var(--theme-surface-image);
+    background-color: hsl(var(--card) / 0.84);
+    border: 1px solid hsl(var(--border) / 0.72);
+    box-shadow: var(--surface-shadow);
+    backdrop-filter: blur(16px);
+  }
+
+  .theme-card-hover {
+    border-color: var(--surface-border-strong);
+    box-shadow: var(--surface-shadow), 0 0 0 1px hsl(var(--primary) / 0.08);
+  }
+
+  .theme-price {
+    color: var(--theme-price-color);
+    text-shadow: var(--theme-price-shadow);
+  }
+
+  .theme-cta-button {
+    background: var(--theme-cta-bg) !important;
+    color: var(--theme-cta-text) !important;
+    box-shadow: var(--theme-cta-shadow) !important;
+    border: 0 !important;
+  }
+
+  .theme-cta-button:hover {
+    background: var(--theme-cta-hover-bg) !important;
+    color: var(--theme-cta-text) !important;
+  }
+
+  .theme-outline-button {
+    border-color: var(--theme-highlight-border) !important;
+    background: var(--theme-highlight-bg) !important;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .theme-outline-button:hover {
+    border-color: hsl(var(--primary) / 0.42) !important;
+    background: hsl(var(--primary) / 0.14) !important;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .theme-nav-button {
+    border-color: hsl(var(--primary) / 0.24) !important;
+    background-image: var(--theme-surface-image) !important;
+    background-color: hsl(var(--secondary) / 0.38) !important;
+    color: hsl(var(--foreground)) !important;
+    box-shadow: inset 0 0 0 1px hsl(var(--primary) / 0.06) !important;
+  }
+
+  .theme-nav-button:hover {
+    border-color: hsl(var(--primary) / 0.4) !important;
+    background-image: var(--theme-surface-image) !important;
+    background-color: hsl(var(--primary) / 0.12) !important;
+    color: hsl(var(--foreground)) !important;
+  }
+
+  .theme-accent-icon {
+    color: var(--theme-icon-color);
+  }
+
+  .theme-emphasis-title {
+    color: var(--theme-price-color);
+    text-shadow: var(--theme-price-shadow);
+  }
+
+  .theme-tab-trigger {
+    color: hsl(var(--muted-foreground)) !important;
+    border: 1px solid transparent !important;
+  }
+
+  .theme-tab-trigger:hover {
+    color: hsl(var(--foreground)) !important;
+    background: hsl(var(--primary) / 0.08) !important;
+  }
+
+  .theme-tab-trigger[data-state="active"] {
+    background: var(--theme-cta-bg) !important;
+    color: var(--theme-cta-text) !important;
+    border-color: hsl(var(--primary) / 0.32) !important;
+    box-shadow: var(--theme-cta-shadow) !important;
+  }
+
+  .theme-tab-trigger[data-state="active"]:hover {
+    background: var(--theme-cta-hover-bg) !important;
+    color: var(--theme-cta-text) !important;
+  }
+
+  .theme-soft-section {
+    background: var(--section-bg);
+  }
+
+  .theme-footer {
+    background: var(--footer-bg);
+  }
+
+  .theme-pill {
+    background-image: var(--theme-surface-image);
+    background-color: hsl(var(--secondary) / 0.58);
+    border: 1px solid hsl(var(--border) / 0.72);
+    backdrop-filter: blur(12px);
+  }
+
+  .theme-sidebar {
+    background-image: var(--theme-surface-image);
+    background-color: hsl(var(--muted) / 0.42);
+  }
+
+  .theme-announcement-bar {
+    background: var(--announcement-bg);
+    border-color: var(--announcement-border);
+  }
+
+  .theme-announcement-header {
+    background: var(--theme-announcement-header-bg);
+  }
+
+  .theme-icon-badge {
+    background: var(--theme-icon-bg);
+    border: 1px solid var(--theme-icon-border);
+    color: var(--theme-icon-color);
+    box-shadow: var(--theme-icon-shadow);
+  }
+
+  .theme-highlight-panel {
+    background: var(--theme-highlight-bg);
+    border: 1px solid var(--theme-highlight-border);
+  }
+
+  .theme-prose {
+    --tw-prose-body: var(--prose-body);
+    --tw-prose-headings: hsl(var(--foreground));
+    --tw-prose-lead: var(--prose-body);
+    --tw-prose-links: var(--prose-link);
+    --tw-prose-bold: var(--prose-strong);
+    --tw-prose-counters: var(--prose-body);
+    --tw-prose-bullets: hsl(var(--primary));
+    --tw-prose-hr: hsl(var(--border));
+    --tw-prose-quotes: var(--prose-strong);
+    --tw-prose-quote-borders: hsl(var(--primary) / 0.35);
+    --tw-prose-captions: var(--prose-body);
+    --tw-prose-code: hsl(var(--foreground));
+    --tw-prose-pre-code: hsl(var(--foreground));
+    --tw-prose-pre-bg: hsl(var(--muted) / 0.7);
+    --tw-prose-th-borders: hsl(var(--border));
+    --tw-prose-td-borders: hsl(var(--border));
   }
 }

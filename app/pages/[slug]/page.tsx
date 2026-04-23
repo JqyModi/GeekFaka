@@ -18,7 +18,7 @@ export async function generateMetadata({ params }: ArticlePageProps): Promise<Me
   if (!article) return { title: "Not Found" };
 
   return {
-    title: `${article.title} - GeekFaka`,
+    title: `${article.title} - AI数字资源站`,
   };
 }
 
@@ -32,11 +32,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
   }
 
   return (
-    <main className="min-h-screen bg-background dark text-foreground flex flex-col">
+    <main className="min-h-screen bg-background text-foreground flex flex-col">
       <Navbar />
       
       <div className="container mx-auto max-w-3xl px-4 py-12 flex-1">
-        <article className="prose prose-zinc dark:prose-invert max-w-none">
+        <article className="theme-prose prose prose-zinc dark:prose-invert max-w-none">
           <h1>{article.title}</h1>
           <div className="text-sm text-muted-foreground mb-8">
             更新于 {new Date(article.updatedAt).toLocaleDateString()}
@@ -45,8 +45,8 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
         </article>
       </div>
 
-      <footer className="border-t py-8 text-center text-sm text-muted-foreground">
-        &copy; {new Date().getFullYear()} GeekFaka. All rights reserved.
+      <footer className="theme-footer border-t py-8 text-center text-sm text-muted-foreground">
+        &copy; {new Date().getFullYear()} AI数字资源站. All rights reserved.
       </footer>
     </main>
   );

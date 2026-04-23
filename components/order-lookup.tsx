@@ -68,12 +68,12 @@ export function OrderLookup() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" className="gap-2 border-primary/30 hover:border-primary/50 hover:bg-primary/5 transition-all shadow-sm">
-          <Search className="h-4 w-4 text-primary" />
+        <Button variant="outline" size="sm" className="theme-nav-button gap-2 rounded-full transition-all shadow-sm">
+          <Search className="theme-accent-icon h-4 w-4" />
           <span className="font-bold">查询订单</span>
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-lg">
+      <DialogContent className="theme-card sm:max-w-lg">
         <DialogHeader>
           <DialogTitle>订单查询</DialogTitle>
           <DialogDescription>
@@ -87,7 +87,7 @@ export function OrderLookup() {
             value={query} 
             onChange={e => setQuery(e.target.value)}
           />
-          <Button type="submit" disabled={loading}>
+          <Button type="submit" disabled={loading} className="theme-cta-button">
             {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : "查询"}
           </Button>
         </form>
@@ -108,7 +108,7 @@ export function OrderLookup() {
                   onClick={() => setOpen(false)}
                   className="block group"
                 >
-                  <div className="border rounded-lg p-3 hover:bg-accent/50 transition-colors flex items-center justify-between">
+                  <div className="theme-pill rounded-lg p-3 hover:bg-accent/50 transition-colors flex items-center justify-between">
                       <div className="space-y-2 flex-1 mr-4">
                         <div className="font-bold text-sm leading-tight text-foreground/90">
                           {order.product.name}

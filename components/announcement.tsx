@@ -39,7 +39,7 @@ export function Announcement({ content }: AnnouncementProps) {
   return (
     <>
       {/* Minimal Announcement Bar */}
-      <div className="bg-primary/5 border-b border-primary/10 hover:bg-primary/10 transition-colors cursor-pointer group" onClick={() => setOpen(true)}>
+      <div className="theme-announcement-bar border-b hover:bg-primary/10 transition-colors cursor-pointer group" onClick={() => setOpen(true)}>
         <div className="container mx-auto max-w-6xl px-4 py-2.5 flex items-center justify-between gap-4">
           <div className="flex items-center gap-3 overflow-hidden">
             <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-primary/20 text-primary animate-pulse">
@@ -57,8 +57,8 @@ export function Announcement({ content }: AnnouncementProps) {
 
       {/* Full Content Dialog */}
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogContent className="sm:max-w-2xl max-h-[85vh] overflow-hidden flex flex-col p-0 gap-0 border-primary/20 bg-background/95 backdrop-blur-2xl">
-          <DialogHeader className="p-6 pb-4 border-b bg-primary/5">
+        <DialogContent className="theme-card sm:max-w-2xl max-h-[85vh] overflow-hidden flex flex-col p-0 gap-0 border-primary/20 bg-background/95 backdrop-blur-2xl">
+          <DialogHeader className="theme-announcement-header p-6 pb-4 border-b">
             <div className="flex items-center gap-3">
               <div className="p-2 bg-primary/20 rounded-xl">
                 <Bell className="h-5 w-5 text-primary" />
@@ -68,13 +68,13 @@ export function Announcement({ content }: AnnouncementProps) {
           </DialogHeader>
           
           <div className="flex-1 overflow-y-auto p-8 custom-scrollbar">
-            <div className="prose prose-sm dark:prose-invert max-w-none prose-headings:text-foreground prose-headings:font-black prose-p:text-muted-foreground prose-strong:text-primary prose-a:text-primary hover:prose-a:underline leading-relaxed">
+            <div className="theme-prose prose prose-sm dark:prose-invert max-w-none prose-headings:text-foreground prose-headings:font-black prose-p:text-muted-foreground prose-strong:text-primary prose-a:text-primary hover:prose-a:underline leading-relaxed">
               <ReactMarkdown>{content}</ReactMarkdown>
             </div>
           </div>
 
-          <div className="p-4 border-t bg-muted/30 flex justify-center">
-            <Button className="w-full sm:w-32 font-bold shadow-lg shadow-primary/20" onClick={() => setOpen(false)}>
+          <div className="theme-sidebar p-4 border-t flex justify-center">
+            <Button className="w-full sm:w-32 font-bold" onClick={() => setOpen(false)}>
               我已阅读
             </Button>
           </div>

@@ -14,6 +14,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 import { Switch } from "@/components/ui/switch"
 import { Checkbox } from "@/components/ui/checkbox"
+import { SITE_THEMES } from "@/lib/themes"
 
 // Define available sub-channels for EPay
 const EPAY_SUB_CHANNELS = [
@@ -196,7 +197,7 @@ export default function SettingsPage() {
                 <Input 
                   value={draftConfig.site_title || ""}
                   onChange={e => handleChange("site_title", e.target.value)}
-                  placeholder="GeekFaka - 自动发货平台"
+                  placeholder="AI数字资源站 - 提示词 / 工作流 / 数字权益自动发货"
                 />
               </div>
               <div className="grid gap-2">
@@ -208,6 +209,27 @@ export default function SettingsPage() {
                 />
                 <p className="text-xs text-muted-foreground">
                   必须配置正确的域名（包含 https://），否则支付后无法自动发货。
+                </p>
+              </div>
+              <div className="grid gap-2">
+                <Label>站点主题</Label>
+                <Select
+                  value={draftConfig.site_theme || "default"}
+                  onValueChange={(value) => handleChange("site_theme", value)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="选择站点主题" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {SITE_THEMES.map((theme) => (
+                      <SelectItem key={theme.value} value={theme.value}>
+                        {theme.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <p className="text-xs text-muted-foreground">
+                  默认主题保持当前风格，另外两套主题分别参考 `sd.ncet.top` 与 `aicz.online` 的视觉语言。
                 </p>
               </div>
 
@@ -244,7 +266,7 @@ export default function SettingsPage() {
                    <Textarea 
                      value={draftConfig.site_contact_info || ""}
                      onChange={e => handleChange("site_contact_info", e.target.value)}
-                     placeholder="支持 Markdown，例如：联系邮箱：`support@example.com`"
+                     placeholder="支持 Markdown，例如：联系邮箱：`support@example.com`，商务合作：`bd@example.com`"
                      className="min-h-[100px] font-mono text-sm"
                    />
                    <p className="text-xs text-muted-foreground">

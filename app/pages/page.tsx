@@ -13,16 +13,16 @@ export default async function HelpCenterPage() {
   });
 
   return (
-    <main className="min-h-screen bg-background dark text-foreground flex flex-col">
+    <main className="min-h-screen bg-background text-foreground flex flex-col">
       <Navbar />
       
       <div className="container mx-auto max-w-4xl px-4 py-16 flex-1">
         <div className="text-center mb-12 space-y-4">
-          <div className="inline-flex p-3 rounded-2xl bg-primary/10 text-primary mb-4">
+          <div className="theme-icon-badge inline-flex p-4 rounded-[1.75rem] mb-4">
             <BookOpen className="h-8 w-8" />
           </div>
-          <h1 className="text-4xl font-black tracking-tight">帮助中心</h1>
-          <p className="text-muted-foreground text-lg">这里有您需要的教程、常见问题以及服务条款</p>
+          <h1 className="text-4xl font-black tracking-tight">使用指南</h1>
+          <p className="text-muted-foreground text-lg">购买说明、交付方式、常见问题与售后规则都在这里</p>
         </div>
 
         <div className="grid gap-4">
@@ -33,8 +33,8 @@ export default async function HelpCenterPage() {
           ) : (
             articles.map((article) => (
               <Link key={article.slug} href={`/pages/${article.slug}`}>
-                <Card className="hover:border-primary/50 transition-all group overflow-hidden relative">
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <Card className="theme-card hover:theme-card-hover transition-all group overflow-hidden relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-primary/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
                   <CardHeader className="flex flex-row items-center justify-between space-y-0 p-6">
                     <div className="space-y-1">
                       <CardTitle className="text-xl font-bold group-hover:text-primary transition-colors">
@@ -53,8 +53,8 @@ export default async function HelpCenterPage() {
         </div>
       </div>
 
-      <footer className="border-t py-8 text-center text-sm text-muted-foreground">
-        &copy; {new Date().getFullYear()} GeekFaka. All rights reserved.
+      <footer className="theme-footer border-t py-8 text-center text-sm text-muted-foreground">
+        &copy; {new Date().getFullYear()} AI数字资源站. All rights reserved.
       </footer>
     </main>
   );
