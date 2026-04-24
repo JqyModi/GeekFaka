@@ -69,7 +69,7 @@ export async function sendOrderEmail(orderNo: string) {
     }
 
     const resend = new Resend(config.resend_api_key);
-    const siteTitle = config.site_title || 'GeekFaka';
+    const siteTitle = config.site_title || 'AI数字资源站';
 
     const deliveryFormat = (order.product as any).deliveryFormat || "SINGLE";
     const licenseList = order.licenses

@@ -201,7 +201,7 @@ export class EpayProvider implements PaymentAdapter {
       return_url: returnUrl,
       name: description,
       money: amount.toFixed(2),
-      sitename: "GeekFaka",
+      sitename: "AI数字资源站",
       sign_type: this.signType
     };
 

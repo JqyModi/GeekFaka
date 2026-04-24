@@ -16,7 +16,7 @@ export default async function AdminLayout({
       {/* Desktop Sidebar */}
       <aside className="hidden w-64 flex-col border-r bg-background md:flex shrink-0">
         <div className="flex h-14 items-center border-b px-6 font-bold text-lg">
-          GeekFaka Admin
+          AI数字资源站 Admin
         </div>
         <nav className="flex-1 space-y-1 p-4 overflow-y-auto">
           <Link href="/admin">

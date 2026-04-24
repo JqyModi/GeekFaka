@@ -7,49 +7,49 @@ async function main() {
 
   // Create Category
   const category = await prisma.category.upsert({
-    where: { slug: 'streaming' },
+    where: { slug: 'ai-prompts' },
     update: {},
     create: {
-      name: 'Streaming Services',
-      slug: 'streaming',
+      name: 'AI 提示词',
+      slug: 'ai-prompts',
       priority: 10,
     },
   })
 
   // Create Product 1
-  const netflix = await prisma.product.create({
+  const promptPack = await prisma.product.create({
     data: {
-      name: 'Netflix 4K Ultra HD (1 Month)',
-      description: 'Private profile, 4K support, 30 days warranty.',
-      price: 3.50,
+      name: 'Midjourney 海报提示词包',
+      description: '适用于海报、电商主图与社媒封面，含多场景高转化提示词模板与使用说明。',
+      price: 29.90,
       categoryId: category.id,
       licenses: {
         create: [
-          { code: 'NF-1111-2222-3333' },
-          { code: 'NF-4444-5555-6666' },
-          { code: 'NF-7777-8888-9999' },
+          { code: 'MJ-POSTER-PROMPT-001' },
+          { code: 'MJ-POSTER-PROMPT-002' },
+          { code: 'MJ-POSTER-PROMPT-003' },
         ]
       }
     }
   })
 
   // Create Product 2
-  const spotify = await prisma.product.create({
+  const workflowPack = await prisma.product.create({
     data: {
-      name: 'Spotify Premium Individual (1 Month)',
-      description: 'Upgrade your own account. No ads, offline listening.',
-      price: 1.99,
+      name: 'ChatGPT 内容运营工作流',
+      description: '覆盖选题、标题、长文、短视频脚本与复盘流程，适合个人创作者与小团队提效。',
+      price: 49.00,
       categoryId: category.id,
       licenses: {
         create: [
-          { code: 'SP-AAAA-BBBB-CCCC' },
-          { code: 'SP-DDDD-EEEE-FFFF' },
+          { code: 'GPT-CONTENT-WORKFLOW-001' },
+          { code: 'GPT-CONTENT-WORKFLOW-002' },
         ]
       }
     }
   })
 
-  console.log({ category, netflix, spotify })
+  console.log({ category, promptPack, workflowPack })
   console.log('Seeding finished.')
 }
 

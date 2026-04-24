@@ -374,7 +374,7 @@ export default function ProductsPage() {
                     value={formData.name}
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     required
-                    placeholder="例如：Netflix 4K"
+                    placeholder="例如：Midjourney 海报提示词包"
                   />
                 </div>
                 <div className="grid gap-2">
