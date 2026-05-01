@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1000, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1000px;
+      min-height: 1580px;
+      overflow: hidden;
+      font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+      color: #111a15;
+      background:
+        radial-gradient(circle at 14% 12%, rgba(255, 164, 102, 0.34), transparent 28%),
+        radial-gradient(circle at 92% 8%, rgba(34, 152, 105, 0.28), transparent 26%),
+        linear-gradient(158deg, #fff0d7 0%, #ecf4df 50%, #daf0ec 100%);
+    }
+    .frame { width: 100%; height: 1500px; padding: 74px 68px; position: relative; }
+    .eyebrow {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 999px;
+      background: #132019;
+      color: #fff6df;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 96px 0 0;
+      font-size: 86px;
+      line-height: 0.98;
+      letter-spacing: -0.06em;
+      font-weight: 950;
+    }
+    h1 span { color: #07905e; }
+    .formula {
+      margin-top: 72px;
+      display: grid;
+      gap: 18px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      align-items: center;
+      gap: 18px;
+      padding: 24px 28px;
+      border-radius: 28px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 2px solid rgba(17, 26, 21, 0.1);
+      font-size: 30px;
+      font-weight: 850;
+    }
+    .key { color: #07905e; }
+    .cta {
+      position: absolute;
+      left: 68px;
+      right: 68px;
+      bottom: 118px;
+      padding: 34px 38px;
+      border-radius: 40px;
+      background: #132019;
+      color: #fff6df;
+      font-size: 35px;
+      line-height: 1.28;
+      font-weight: 900;
+      box-shadow: 0 34px 80px rgba(19, 32, 25, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="eyebrow">Prompt Formula</div>
+    <h1>AI product photo prompt <span>template</span></h1>
+    <section class="formula">
+      <div class="row"><div class="key">Subject</div><div>product / person / course</div></div>
+      <div class="row"><div class="key">Scene</div><div>studio / desk / poster</div></div>
+      <div class="row"><div class="key">Style</div><div>premium / clean / retro</div></div>
+      <div class="row"><div class="key">Use</div><div>cover / ad / thumbnail</div></div>
+      <div class="row"><div class="key">Ratio</div><div>1:1 / 3:4 / 9:16</div></div>
+    </section>
+    <div class="cta">Copy-ready prompt pack for product posters, social covers, and profile visuals.</div>
+  </main>
+</body>
+</html>
+

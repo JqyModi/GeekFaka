@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1080, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1080px;
+      min-height: 9600px;
+      background: #f6efd8;
+      font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+      color: #121a15;
+    }
+    .slide {
+      width: 1080px;
+      height: 1920px;
+      position: relative;
+      overflow: hidden;
+      padding: 118px 86px;
+      background:
+        radial-gradient(circle at 15% 12%, rgba(255, 150, 84, 0.35), transparent 28%),
+        radial-gradient(circle at 86% 8%, rgba(34, 152, 105, 0.32), transparent 28%),
+        linear-gradient(155deg, #fff0d8 0%, #edf4df 54%, #d7efec 100%);
+    }
+    .kicker {
+      display: inline-flex;
+      padding: 16px 26px;
+      border-radius: 999px;
+      background: #132019;
+      color: #fff6df;
+      font-size: 32px;
+      font-weight: 950;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 150px 0 0;
+      font-size: 112px;
+      line-height: 0.98;
+      letter-spacing: -0.065em;
+      font-weight: 950;
+    }
+    h1 span { color: #08905e; }
+    .sub {
+      margin-top: 54px;
+      font-size: 45px;
+      line-height: 1.35;
+      color: rgba(18, 26, 21, 0.68);
+      font-weight: 760;
+    }
+    .panel {
+      margin-top: 92px;
+      padding: 46px;
+      border-radius: 46px;
+      background: #132019;
+      color: #fff6df;
+      box-shadow: 0 42px 90px rgba(19, 32, 25, 0.22);
+    }
+    .panel h2 {
+      margin: 0 0 28px;
+      font-size: 56px;
+      line-height: 1.05;
+    }
+    .panel p {
+      margin: 0;
+      font-size: 38px;
+      line-height: 1.35;
+      font-weight: 750;
+      color: rgba(255, 246, 223, 0.88);
+    }
+    .chips {
+      position: absolute;
+      left: 86px;
+      right: 86px;
+      bottom: 180px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 18px;
+    }
+    .chip {
+      padding: 18px 24px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 2px solid rgba(18, 26, 21, 0.1);
+      font-size: 34px;
+      font-weight: 900;
+    }
+    .url {
+      position: absolute;
+      left: 86px;
+      bottom: 88px;
+      font-size: 34px;
+      font-weight: 900;
+      color: rgba(18, 26, 21, 0.62);
+    }
+    .formula {
+      margin-top: 90px;
+      display: grid;
+      gap: 26px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 190px 1fr;
+      align-items: center;
+      padding: 32px 36px;
+      border-radius: 34px;
+      background: rgba(255, 255, 255, 0.7);
+      border: 2px solid rgba(18, 26, 21, 0.1);
+      font-size: 39px;
+      font-weight: 900;
+    }
+    .key { color: #08905e; }
+  </style>
+</head>
+<body>
+  <section class="slide" id="s1">
+    <div class="kicker">AI Image Prompts</div>
+    <h1>Still making <span>product images</span> from scratch?</h1>
+    <p class="sub">Use a fixed prompt structure before you waste another hour testing random words.</p>
+    <div class="chips">
+      <div class="chip">Product posters</div>
+      <div class="chip">Social covers</div>
+      <div class="chip">Thumbnails</div>
+    </div>
+    <div class="url">faka.minai.eu.org</div>
+  </section>
+
+  <section class="slide" id="s2">
+    <div class="kicker">The Formula</div>
+    <h1>Subject + Scene + Style + Platform + Ratio</h1>
+    <section class="formula">
+      <div class="row"><div class="key">Subject</div><div>product / person / course</div></div>
+      <div class="row"><div class="key">Scene</div><div>studio / desk / poster</div></div>
+      <div class="row"><div class="key">Style</div><div>premium / clean / retro</div></div>
+      <div class="row"><div class="key">Ratio</div><div>1:1 / 3:4 / 9:16</div></div>
+    </section>
+  </section>
+
+  <section class="slide" id="s3">
+    <div class="kicker">Example</div>
+    <h1>Turn a plain idea into a <span>clean poster</span></h1>
+    <div class="panel">
+      <h2>Copy this structure</h2>
+      <p>Create a clean ecommerce poster for [product], studio lighting, premium minimal style, space for a short headline, 3:4 ratio.</p>
+    </div>
+  </section>
+
+  <section class="slide" id="s4">
+    <div class="kicker">Inside the Pack</div>
+    <h1>Reusable prompts for daily content work</h1>
+    <div class="chips">
+      <div class="chip">Product hero images</div>
+      <div class="chip">Ad posters</div>
+      <div class="chip">Social covers</div>
+      <div class="chip">Profile visuals</div>
+      <div class="chip">Fix prompts</div>
+    </div>
+  </section>
+
+  <section class="slide" id="s5">
+    <div class="kicker">Instant Digital Product</div>
+    <h1>Get the <span>copy-ready prompt pack</span></h1>
+    <div class="panel">
+      <h2>Link in description</h2>
+      <p>AI image prompt pack for product posters, social covers, thumbnails, and profile visuals.</p>
+    </div>
+    <div class="url">faka.minai.eu.org</div>
+  </section>
+</body>
+</html>
+

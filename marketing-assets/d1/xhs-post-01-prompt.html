@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1242, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1242px;
+      min-height: 1750px;
+      overflow: hidden;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #151a1d;
+      background: linear-gradient(160deg, #f8f1df 0%, #eef7ec 58%, #d7efe9 100%);
+    }
+    .frame { position: relative; padding: 86px; width: 100%; height: 1656px; }
+    .kicker {
+      display: inline-block;
+      padding: 16px 24px;
+      border-radius: 999px;
+      background: #14201a;
+      color: #fff8df;
+      font-size: 32px;
+      font-weight: 900;
+    }
+    h1 {
+      margin: 82px 0 38px;
+      font-size: 88px;
+      line-height: 1.06;
+      letter-spacing: -0.04em;
+    }
+    .formula {
+      margin: 42px 0;
+      display: grid;
+      gap: 20px;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 210px 1fr;
+      gap: 24px;
+      align-items: center;
+      padding: 28px 34px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.66);
+      border: 2px solid rgba(21, 26, 29, 0.1);
+    }
+    .label { font-size: 32px; font-weight: 900; color: #0f8f62; }
+    .value { font-size: 32px; font-weight: 700; color: rgba(21, 26, 29, 0.76); }
+    .sample {
+      margin-top: 52px;
+      padding: 42px;
+      border-radius: 42px;
+      background: #14201a;
+      color: #f8f1df;
+      box-shadow: 0 30px 90px rgba(20, 32, 26, 0.2);
+    }
+    .sample h2 {
+      margin: 0 0 20px;
+      font-size: 44px;
+    }
+    .sample p {
+      margin: 0;
+      font-size: 31px;
+      line-height: 1.5;
+      font-weight: 650;
+      color: rgba(248, 241, 223, 0.88);
+    }
+    .footer {
+      position: absolute;
+      left: 86px;
+      right: 86px;
+      bottom: 116px;
+      font-size: 30px;
+      color: rgba(21, 26, 29, 0.62);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="kicker">免费样例结构</div>
+    <h1>提示词先别写长，先填 5 个变量</h1>
+    <section class="formula">
+      <div class="row"><div class="label">主体</div><div class="value">产品 / 人像 / 课程 / 活动</div></div>
+      <div class="row"><div class="label">场景</div><div class="value">摄影棚 / 桌面 / 户外 / 品牌海报</div></div>
+      <div class="row"><div class="label">风格</div><div class="value">高级感 / 清透 / 复古 / 科技感</div></div>
+      <div class="row"><div class="label">用途</div><div class="value">主图 / 封面 / 广告图 / 头像</div></div>
+      <div class="row"><div class="label">比例</div><div class="value">1:1 / 3:4 / 9:16 / 16:9</div></div>
+    </section>
+    <section class="sample">
+      <h2>可直接替换</h2>
+      <p>请生成一张适合小红书封面的商品海报，主体是 [产品]，背景为干净的浅色摄影棚，画面有高级感，突出产品质感，比例 3:4。</p>
+    </section>
+    <div class="footer">完整模板包：faka.minai.eu.org</div>
+  </main>
+</body>
+</html>

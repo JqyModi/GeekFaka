@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=900, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 900px;
+      height: 1200px;
+      overflow: hidden;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #15110c;
+      background: #fff3df;
+    }
+    .frame {
+      width: 100%;
+      height: 100%;
+      padding: 62px;
+      background:
+        radial-gradient(circle at 16% 8%, rgba(239, 67, 49, .24), transparent 24%),
+        radial-gradient(circle at 92% 12%, rgba(11, 96, 76, .18), transparent 22%),
+        linear-gradient(180deg, #fff8ea 0%, #f4dfbf 100%);
+    }
+    .tag {
+      display: inline-block;
+      padding: 13px 22px;
+      border: 4px solid #15110c;
+      border-radius: 999px;
+      background: #ffd447;
+      font-size: 30px;
+      font-weight: 950;
+      box-shadow: 8px 8px 0 #15110c;
+    }
+    h1 {
+      margin: 58px 0 0;
+      font-size: 78px;
+      line-height: 1.02;
+      letter-spacing: -0.065em;
+      font-weight: 950;
+    }
+    h1 span { color: #ef3f2f; }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      margin-top: 72px;
+    }
+    .box {
+      min-height: 380px;
+      border: 5px solid #15110c;
+      border-radius: 38px;
+      padding: 34px 28px;
+      box-shadow: 12px 12px 0 #15110c;
+    }
+    .bad { background: #f04432; color: #fff8ea; }
+    .good { background: #0b604c; color: #fff8ea; }
+    .box-title {
+      font-size: 42px;
+      line-height: 1.08;
+      font-weight: 950;
+    }
+    .line {
+      margin-top: 30px;
+      padding: 18px 0;
+      border-top: 3px dashed rgba(255,255,255,.38);
+      font-size: 30px;
+      line-height: 1.22;
+      font-weight: 860;
+    }
+    .footer {
+      margin-top: 72px;
+      padding: 28px 32px;
+      border: 4px solid #15110c;
+      border-radius: 28px;
+      background: #fffaf0;
+      font-size: 34px;
+      line-height: 1.24;
+      font-weight: 920;
+      box-shadow: 8px 8px 0 #15110c;
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+      <div class="tag">有些亏，是话没说稳</div>
+    <h1>普通人先学<br>不是暴富<br>是<span>少吃亏</span></h1>
+    <section class="split">
+      <div class="box bad">
+        <div class="box-title">容易吃亏</div>
+        <div class="line">拒绝借钱太含糊</div>
+        <div class="line">投诉客服说太散</div>
+        <div class="line">汇报工作没重点</div>
+      </div>
+      <div class="box good">
+        <div class="box-title">更稳的说法</div>
+        <div class="line">先摆事实</div>
+        <div class="line">再讲诉求</div>
+        <div class="line">最后给边界</div>
+      </div>
+    </section>
+    <div class="footer">先让 AI 帮你把话说稳，把事理顺。</div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=900, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 900px;
+      height: 1200px;
+      overflow: hidden;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #17130d;
+      background: #f7efe2;
+    }
+    .frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 58px;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(231, 65, 50, .28), transparent 25%),
+        radial-gradient(circle at 90% 92%, rgba(10, 95, 78, .24), transparent 28%),
+        linear-gradient(145deg, #fff7e6 0%, #ebdcc5 100%);
+    }
+    .stamp {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      padding: 16px 24px;
+      border: 5px solid #17130d;
+      border-radius: 999px;
+      background: #ffd84d;
+      box-shadow: 8px 8px 0 #17130d;
+      font-size: 32px;
+      font-weight: 950;
+    }
+    h1 {
+      margin: 58px 0 0;
+      max-width: 700px;
+      font-size: 98px;
+      line-height: .93;
+      letter-spacing: -0.075em;
+      font-weight: 950;
+    }
+    .red { color: #e74132; }
+    .panel {
+      position: absolute;
+      left: 58px;
+      right: 58px;
+      bottom: 62px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .box {
+      min-height: 150px;
+      padding: 24px;
+      border: 5px solid #17130d;
+      border-radius: 30px;
+      background: #fffaf0;
+      box-shadow: 8px 8px 0 #17130d;
+      font-size: 33px;
+      line-height: 1.08;
+      font-weight: 950;
+    }
+    .box.dark {
+      background: #0b604c;
+      color: #fffaf0;
+    }
+    .bubble {
+      position: absolute;
+      right: 52px;
+      top: 412px;
+      width: 304px;
+      padding: 28px 26px;
+      border: 5px solid #17130d;
+      border-radius: 34px;
+      background: #e74132;
+      color: #fffaf0;
+      box-shadow: 12px 12px 0 #17130d;
+      transform: rotate(4deg);
+      font-size: 38px;
+      line-height: 1.06;
+      font-weight: 950;
+    }
+    .footer {
+      position: absolute;
+      left: 58px;
+      bottom: 266px;
+      padding: 18px 24px;
+      border: 5px solid #17130d;
+      border-radius: 999px;
+      background: #fffaf0;
+      font-size: 32px;
+      font-weight: 950;
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="stamp">收藏备用</div>
+    <h1>别人<br>借钱时<br>照这<span class="red">9句</span>回</h1>
+    <div class="bubble">不撕破脸<br>也不委屈自己</div>
+    <div class="footer">怕伤关系的人更要看</div>
+    <section class="panel">
+      <div class="box">委婉拒绝<br>不留口子</div>
+      <div class="box dark">被追问时<br>不再解释</div>
+    </section>
+  </main>
+</body>
+</html>

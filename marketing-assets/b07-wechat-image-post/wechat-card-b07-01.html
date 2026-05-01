@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=900, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 900px;
+      height: 1200px;
+      overflow: hidden;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #17120c;
+      background: #fff4e2;
+    }
+    .frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 64px;
+      background:
+        radial-gradient(circle at 18% 10%, rgba(240, 65, 45, .26), transparent 24%),
+        radial-gradient(circle at 92% 4%, rgba(8, 92, 72, .2), transparent 22%),
+        linear-gradient(180deg, #fff8eb 0%, #f5e0bf 100%);
+    }
+    .kicker {
+      display: inline-block;
+      padding: 14px 22px;
+      border: 4px solid #17120c;
+      border-radius: 999px;
+      background: #ffd447;
+      font-size: 30px;
+      font-weight: 950;
+      box-shadow: 8px 8px 0 #17120c;
+    }
+    h1 {
+      margin: 70px 0 0;
+      font-size: 86px;
+      line-height: .98;
+      letter-spacing: -0.07em;
+      font-weight: 950;
+    }
+    h1 span { color: #ec3d2d; }
+    .panel {
+      margin-top: 70px;
+      border: 5px solid #17120c;
+      border-radius: 42px;
+      padding: 40px;
+      background: #fffdf4;
+      box-shadow: 15px 15px 0 #17120c;
+    }
+    .row {
+      display: flex;
+      align-items: center;
+      gap: 22px;
+      padding: 24px 0;
+      border-bottom: 3px dashed rgba(23, 18, 12, .22);
+      font-size: 35px;
+      font-weight: 880;
+      line-height: 1.22;
+    }
+    .row:last-child { border-bottom: 0; }
+    .bad {
+      display: grid;
+      place-items: center;
+      width: 60px;
+      height: 60px;
+      flex: 0 0 60px;
+      border: 4px solid #17120c;
+      border-radius: 18px;
+      background: #ec3d2d;
+      color: #fff8eb;
+      font-size: 34px;
+      font-weight: 950;
+    }
+    .bottom {
+      position: absolute;
+      left: 64px;
+      right: 64px;
+      bottom: 54px;
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      color: rgba(23, 18, 12, .68);
+      font-size: 27px;
+      font-weight: 820;
+    }
+    .brand {
+      color: #0b604c;
+      font-weight: 950;
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="kicker">很多人卡住，不是因为不会 AI</div>
+    <h1>是因为一上来<br>就想卖<span>大而空</span><br>的东西</h1>
+    <section class="panel">
+      <div class="row"><div class="bad">×</div><div>AI 赚钱资料</div></div>
+      <div class="row"><div class="bad">×</div><div>ChatGPT 全套教程</div></div>
+      <div class="row"><div class="bad">×</div><div>自媒体运营秘籍</div></div>
+    </section>
+    <div class="bottom">
+      <div>用户只想知道：这条能不能马上帮到我？</div>
+      <div class="brand">虾语AI</div>
+    </div>
+  </main>
+</body>
+</html>

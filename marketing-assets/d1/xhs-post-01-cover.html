@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1242, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1242px;
+      min-height: 1750px;
+      overflow: hidden;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #17211b;
+      background:
+        radial-gradient(circle at 18% 12%, rgba(116, 203, 147, 0.42), transparent 28%),
+        radial-gradient(circle at 88% 10%, rgba(255, 178, 82, 0.38), transparent 26%),
+        linear-gradient(145deg, #f7f4e8 0%, #dbeed9 48%, #faf1d4 100%);
+    }
+    .frame {
+      position: relative;
+      width: 100%;
+      height: 1656px;
+      padding: 92px 86px;
+    }
+    .badge {
+      display: inline-flex;
+      padding: 18px 28px;
+      border: 3px solid rgba(23, 33, 27, 0.14);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.62);
+      font-size: 34px;
+      font-weight: 800;
+      letter-spacing: 0.06em;
+    }
+    h1 {
+      margin: 128px 0 0;
+      max-width: 940px;
+      font-size: 110px;
+      line-height: 1.04;
+      letter-spacing: -0.06em;
+      font-weight: 950;
+    }
+    h1 span { color: #0f8f62; }
+    .subtitle {
+      margin-top: 48px;
+      max-width: 880px;
+      font-size: 42px;
+      line-height: 1.45;
+      color: rgba(23, 33, 27, 0.76);
+      font-weight: 650;
+    }
+    .cards {
+      position: absolute;
+      left: 86px;
+      right: 86px;
+      bottom: 174px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+    }
+    .card {
+      min-height: 210px;
+      padding: 32px;
+      border-radius: 38px;
+      background: rgba(255, 255, 255, 0.64);
+      border: 3px solid rgba(23, 33, 27, 0.12);
+      box-shadow: 0 28px 80px rgba(45, 84, 63, 0.12);
+    }
+    .card strong {
+      display: block;
+      font-size: 38px;
+      margin-bottom: 14px;
+    }
+    .card p {
+      margin: 0;
+      font-size: 28px;
+      line-height: 1.35;
+      color: rgba(23, 33, 27, 0.66);
+      font-weight: 600;
+    }
+    .mark {
+      position: absolute;
+      right: 74px;
+      top: 690px;
+      width: 310px;
+      height: 310px;
+      border-radius: 90px;
+      transform: rotate(-9deg);
+      background: linear-gradient(135deg, #111b16, #247b5a);
+      color: #f7f4e8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      font-size: 44px;
+      line-height: 1.15;
+      font-weight: 900;
+      box-shadow: 0 42px 90px rgba(21, 93, 64, 0.28);
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="badge">AI 作图提示词模板</div>
+    <h1>不会拍图，也能做出<span>商品主图</span></h1>
+    <p class="subtitle">把产品、场景、风格、平台和比例填进去，先用一套结构减少试错。</p>
+    <div class="mark">20 套<br>可复制<br>模板</div>
+    <section class="cards">
+      <div class="card">
+        <strong>适合谁</strong>
+        <p>电商卖家、内容运营、设计助理、独立站新手</p>
+      </div>
+      <div class="card">
+        <strong>能做什么</strong>
+        <p>主图、海报、封面、头像、活动图快速起稿</p>
+      </div>
+    </section>
+  </main>
+</body>
+</html>

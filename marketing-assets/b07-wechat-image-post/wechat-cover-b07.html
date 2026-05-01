@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=900, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 900px;
+      height: 383px;
+      overflow: hidden;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #15110c;
+      background: #f8ecd8;
+    }
+    .frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 34px 46px;
+      background:
+        radial-gradient(circle at 18% 16%, rgba(247, 78, 54, 0.32), transparent 24%),
+        radial-gradient(circle at 82% 18%, rgba(8, 92, 72, 0.26), transparent 26%),
+        linear-gradient(135deg, #fff6e9 0%, #f6e4c8 62%, #d9eadc 100%);
+    }
+    .noise {
+      position: absolute;
+      inset: 0;
+      opacity: .16;
+      background-image:
+        linear-gradient(90deg, rgba(21, 17, 12, .08) 1px, transparent 1px),
+        linear-gradient(rgba(21, 17, 12, .08) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .tag {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 9px 16px;
+      border: 3px solid #15110c;
+      border-radius: 999px;
+      background: #fffaf0;
+      font-size: 22px;
+      font-weight: 950;
+      box-shadow: 7px 7px 0 #15110c;
+    }
+    h1 {
+      position: relative;
+      z-index: 2;
+      margin: 34px 0 0;
+      max-width: 610px;
+      font-size: 64px;
+      line-height: .98;
+      letter-spacing: -0.07em;
+      font-weight: 950;
+    }
+    h1 .red { color: #ef3f2f; }
+    .sub {
+      position: relative;
+      z-index: 2;
+      margin-top: 20px;
+      font-size: 28px;
+      line-height: 1.25;
+      font-weight: 850;
+      color: rgba(21, 17, 12, .74);
+    }
+    .stack {
+      position: absolute;
+      right: 46px;
+      top: 55px;
+      width: 248px;
+      height: 268px;
+      transform: rotate(-4deg);
+    }
+    .card {
+      position: absolute;
+      width: 218px;
+      height: 150px;
+      border: 4px solid #15110c;
+      border-radius: 24px;
+      background: #fffaf0;
+      box-shadow: 10px 10px 0 #15110c;
+    }
+    .card.one { right: 0; top: 0; }
+    .card.two { right: 26px; top: 78px; background: #f04a38; color: #fffaf0; }
+    .card.three { right: 7px; top: 148px; background: #0b604c; color: #fffaf0; }
+    .line { height: 14px; margin: 22px; border-radius: 99px; background: currentColor; opacity: .85; }
+    .line.short { width: 58%; margin-top: -10px; }
+    .stamp {
+      position: absolute;
+      right: 22px;
+      bottom: 20px;
+      width: 118px;
+      height: 118px;
+      display: grid;
+      place-items: center;
+      border: 4px solid #15110c;
+      border-radius: 50%;
+      background: #ffd447;
+      color: #15110c;
+      font-size: 27px;
+      line-height: 1.05;
+      text-align: center;
+      font-weight: 950;
+      transform: rotate(10deg);
+      box-shadow: 7px 7px 0 #15110c;
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="noise"></div>
+    <div class="tag">别再被 AI 赚钱噪音带跑</div>
+    <h1>先做一份<br><span class="red">别人愿意收藏</span><br>的资料</h1>
+    <div class="sub">涨粉比卖货优先：先让用户觉得“这条有用”</div>
+    <section class="stack" aria-hidden="true">
+      <div class="card one"><div class="line"></div><div class="line short"></div></div>
+      <div class="card two"><div class="line"></div><div class="line short"></div></div>
+      <div class="card three"><div class="line"></div><div class="line short"></div></div>
+    </section>
+    <div class="stamp">可保存<br>模板</div>
+  </main>
+</body>
+</html>

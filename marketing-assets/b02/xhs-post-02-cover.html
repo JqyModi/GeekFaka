@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1242, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1242px;
+      min-height: 1750px;
+      overflow: hidden;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #151a1d;
+      background:
+        radial-gradient(circle at 8% 10%, rgba(255, 152, 89, 0.35), transparent 25%),
+        radial-gradient(circle at 88% 6%, rgba(66, 153, 112, 0.32), transparent 25%),
+        linear-gradient(155deg, #fff3df 0%, #eef7ea 55%, #d9eee8 100%);
+    }
+    .frame { position: relative; width: 100%; height: 1656px; padding: 86px; }
+    .tag {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: 16px 26px;
+      background: #122019;
+      color: #fff5df;
+      font-size: 34px;
+      font-weight: 900;
+    }
+    h1 {
+      margin: 100px 0 0;
+      max-width: 960px;
+      font-size: 100px;
+      line-height: 1.05;
+      letter-spacing: -0.055em;
+      font-weight: 950;
+    }
+    h1 span { color: #0b9162; }
+    .grid {
+      position: absolute;
+      left: 86px;
+      right: 86px;
+      bottom: 130px;
+      display: grid;
+      gap: 24px;
+    }
+    .item {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      align-items: center;
+      gap: 28px;
+      padding: 30px 34px;
+      border-radius: 34px;
+      background: rgba(255, 255, 255, 0.68);
+      border: 2px solid rgba(21, 26, 29, 0.1);
+      box-shadow: 0 26px 70px rgba(45, 82, 62, 0.1);
+    }
+    .num {
+      color: #0b9162;
+      font-size: 54px;
+      font-weight: 950;
+    }
+    .text {
+      font-size: 42px;
+      font-weight: 850;
+    }
+    .note {
+      margin-top: 42px;
+      max-width: 880px;
+      font-size: 40px;
+      line-height: 1.42;
+      color: rgba(21, 26, 29, 0.68);
+      font-weight: 700;
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="tag">提示词别先写长</div>
+    <h1>先填好这 <span>5 个变量</span>，出图稳定很多</h1>
+    <p class="note">把复杂提示词拆成固定结构，新手也能快速改出适合自己的图。</p>
+    <section class="grid">
+      <div class="item"><div class="num">01</div><div class="text">主体：产品 / 人像 / 课程</div></div>
+      <div class="item"><div class="num">02</div><div class="text">场景：摄影棚 / 桌面 / 海报</div></div>
+      <div class="item"><div class="num">03</div><div class="text">风格：高级感 / 清透 / 科技感</div></div>
+      <div class="item"><div class="num">04</div><div class="text">用途：主图 / 封面 / 广告图</div></div>
+      <div class="item"><div class="num">05</div><div class="text">比例：1:1 / 3:4 / 9:16</div></div>
+    </section>
+  </main>
+</body>
+</html>
+

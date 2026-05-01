@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=900, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 900px;
+      height: 383px;
+      overflow: hidden;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #15110c;
+      background: #fff0d8;
+    }
+    .frame {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 34px 48px;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(239, 67, 49, .28), transparent 26%),
+        radial-gradient(circle at 86% 18%, rgba(10, 95, 74, .24), transparent 28%),
+        linear-gradient(135deg, #fff7e8 0%, #f5dfbc 68%, #dcebdc 100%);
+    }
+    .grid {
+      position: absolute;
+      inset: 0;
+      opacity: .13;
+      background-image:
+        linear-gradient(90deg, rgba(21,17,12,.1) 1px, transparent 1px),
+        linear-gradient(rgba(21,17,12,.1) 1px, transparent 1px);
+      background-size: 22px 22px;
+    }
+    .pill {
+      position: relative;
+      display: inline-flex;
+      padding: 8px 16px;
+      border: 3px solid #15110c;
+      border-radius: 999px;
+      background: #ffd447;
+      font-size: 22px;
+      font-weight: 950;
+      box-shadow: 6px 6px 0 #15110c;
+    }
+    h1 {
+      position: relative;
+      z-index: 2;
+      margin: 30px 0 0;
+      max-width: 610px;
+      font-size: 62px;
+      line-height: 1;
+      letter-spacing: -0.07em;
+      font-weight: 950;
+    }
+    h1 .red { color: #ef3f2f; }
+    .sub {
+      position: relative;
+      z-index: 2;
+      margin-top: 17px;
+      font-size: 28px;
+      line-height: 1.25;
+      font-weight: 900;
+      color: rgba(21, 17, 12, .72);
+    }
+    .phone {
+      position: absolute;
+      right: 52px;
+      top: 50px;
+      width: 220px;
+      height: 286px;
+      border: 5px solid #15110c;
+      border-radius: 34px;
+      background: #fffaf0;
+      transform: rotate(5deg);
+      box-shadow: 12px 12px 0 #15110c;
+    }
+    .bubble {
+      position: absolute;
+      left: 22px;
+      right: 22px;
+      height: 48px;
+      border: 4px solid #15110c;
+      border-radius: 18px;
+      background: #fff;
+      font-size: 20px;
+      font-weight: 950;
+      display: flex;
+      align-items: center;
+      padding-left: 14px;
+    }
+    .b1 { top: 36px; background: #f04432; color: #fffaf0; }
+    .b2 { top: 104px; }
+    .b3 { top: 172px; background: #0b604c; color: #fffaf0; }
+    .stamp {
+      position: absolute;
+      right: 30px;
+      bottom: 26px;
+      width: 116px;
+      height: 116px;
+      display: grid;
+      place-items: center;
+      border: 4px solid #15110c;
+      border-radius: 50%;
+      background: #ffd447;
+      font-size: 27px;
+      line-height: 1.05;
+      text-align: center;
+      font-weight: 950;
+      transform: rotate(-10deg);
+      box-shadow: 7px 7px 0 #15110c;
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="grid"></div>
+    <div class="pill">有些话不是不会说</div>
+    <h1>这 5 句话<br>帮你少吃很多<span class="red">哑巴亏</span></h1>
+    <div class="sub">用 AI 改一下，说话稳很多</div>
+    <div class="phone" aria-hidden="true">
+      <div class="bubble b1">借钱咋拒绝？</div>
+      <div class="bubble b2">汇报怎么写？</div>
+      <div class="bubble b3">标题怎么起？</div>
+    </div>
+    <div class="stamp">收藏<br>备用</div>
+  </main>
+</body>
+</html>

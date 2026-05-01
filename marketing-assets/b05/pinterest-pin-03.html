@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1000, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1000px;
+      min-height: 1580px;
+      overflow: hidden;
+      font-family: "Avenir Next", "Helvetica Neue", Arial, sans-serif;
+      color: #16201a;
+      background:
+        radial-gradient(circle at 15% 11%, rgba(255, 122, 76, 0.32), transparent 28%),
+        radial-gradient(circle at 86% 8%, rgba(21, 138, 95, 0.26), transparent 26%),
+        linear-gradient(156deg, #fff2dc 0%, #eff4d9 48%, #d9f0e8 100%);
+    }
+    .frame { position: relative; width: 100%; height: 1500px; padding: 74px 68px; }
+    .eyebrow {
+      display: inline-block;
+      padding: 14px 22px;
+      border-radius: 999px;
+      background: #16201a;
+      color: #fff6df;
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    h1 {
+      margin: 96px 0 0;
+      font-size: 84px;
+      line-height: 1;
+      letter-spacing: -0.06em;
+      font-weight: 950;
+    }
+    h1 span { color: #0a8f63; }
+    .steps {
+      margin-top: 74px;
+      display: grid;
+      gap: 20px;
+    }
+    .step {
+      display: grid;
+      grid-template-columns: 74px 1fr;
+      gap: 22px;
+      align-items: center;
+      padding: 28px 30px;
+      border-radius: 30px;
+      background: rgba(255, 255, 255, 0.72);
+      border: 2px solid rgba(22, 32, 26, 0.1);
+      font-size: 32px;
+      line-height: 1.18;
+      font-weight: 850;
+    }
+    .num {
+      width: 58px;
+      height: 58px;
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      background: #0a8f63;
+      color: #fff6df;
+      font-size: 28px;
+      font-weight: 950;
+    }
+    .cta {
+      position: absolute;
+      left: 68px;
+      right: 68px;
+      bottom: 112px;
+      padding: 34px 38px;
+      border-radius: 40px;
+      background: #16201a;
+      color: #fff6df;
+      font-size: 35px;
+      line-height: 1.28;
+      font-weight: 900;
+      box-shadow: 0 34px 80px rgba(19, 32, 25, 0.2);
+    }
+  </style>
+</head>
+<body>
+  <main class="frame">
+    <div class="eyebrow">Social Covers</div>
+    <h1>ChatGPT prompts for <span>covers</span>, posters, and thumbnails</h1>
+    <section class="steps">
+      <div class="step"><div class="num">1</div><div>Start with the platform and format</div></div>
+      <div class="step"><div class="num">2</div><div>Add subject, scene, and visual style</div></div>
+      <div class="step"><div class="num">3</div><div>Reserve space for headline text</div></div>
+      <div class="step"><div class="num">4</div><div>Lock aspect ratio before generating</div></div>
+    </section>
+    <div class="cta">Copy-ready prompt pack for product visuals and content creators.</div>
+  </main>
+</body>
+</html>
