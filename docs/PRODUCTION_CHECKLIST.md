@@ -102,6 +102,51 @@ docker logs --tail 100 geekfaka-mysql
 - 扫码后数秒内自动显示卡密
 - 无需点击“我已支付，点击刷新”
 
+### 1.6 上游货源同步
+
+适用于启用了 API 货源的商品。
+
+环境变量必须配置：
+
+```bash
+SUPPLIER_SECRET_KEY=一段独立的长随机字符串
+SUPPLIER_SYNC_TOKEN=一段仅 cron 知道的长随机字符串
+```
+
+说明：
+
+- `SUPPLIER_SECRET_KEY` 用于加密后台保存的上游 API Key，生产环境上线后不要随意更换
+- `SUPPLIER_SYNC_TOKEN` 用于保护 `/api/suppliers/sync` 定时同步入口
+
+手动触发全量货源同步：
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $SUPPLIER_SYNC_TOKEN" \
+  https://faka.minai.eu.org/api/suppliers/sync
+```
+
+手动触发单个货源同步：
+
+```bash
+curl -X POST \
+  -H "Authorization: Bearer $SUPPLIER_SYNC_TOKEN" \
+  "https://faka.minai.eu.org/api/suppliers/sync?supplierId=供应商ID"
+```
+
+期望：
+
+- 返回 JSON 中 `success` 为 `true`
+- 后台「货源管理」中供应商健康状态不是 `ERROR`
+- 已导入商品的库存和成本价跟随上游刷新
+- 后台订单列表能看到供应商履约状态和上游订单号
+
+建议 cron：
+
+```bash
+*/5 * * * * curl -fsS -X POST -H "Authorization: Bearer $SUPPLIER_SYNC_TOKEN" https://faka.minai.eu.org/api/suppliers/sync >/dev/null
+```
+
 ## 2. 上线前检查
 
 在修改代码、支付逻辑、订单页逻辑、Nginx 配置之前，先确认以下内容。
@@ -110,6 +155,7 @@ docker logs --tail 100 geekfaka-mysql
 
 - 本地代码已保存
 - 生产环境 `.env.production` 不会被覆盖为错误值
+- 生产环境已配置 `SUPPLIER_SECRET_KEY` 和 `SUPPLIER_SYNC_TOKEN`
 - 不会误删 `mysql_data`
 - `.dockerignore` 存在
 
@@ -194,6 +240,8 @@ curl -s 'https://faka.minai.eu.org/_next/static/chunks/app/orders/%5BorderNo%5D/
 
 - 测试商品是否还有库存
 - 正式商品是否存在“已上架但库存为 0”
+- API 货源商品是否存在“同步时间过旧但仍上架”
+- API 货源商品是否存在“上游库存为 0 但本地仍显示可售”
 
 ### 5.2 订单状态
 
@@ -201,6 +249,7 @@ curl -s 'https://faka.minai.eu.org/_next/static/chunks/app/orders/%5BorderNo%5D/
 
 - 是否存在大量长期 `PENDING` 订单
 - 是否存在支付成功但未发货订单
+- 是否存在 `SupplierOrder` 状态为 `PARTIAL` 或 `FAILED` 的订单
 
 如果发现异常，应立即对照故障响应手册排查。
 
@@ -224,4 +273,3 @@ curl -s 'https://faka.minai.eu.org/_next/static/chunks/app/orders/%5BorderNo%5D/
 - 最近支付回调是否正常
 - 是否执行了真实支付抽检
 - 是否发现异常
-
