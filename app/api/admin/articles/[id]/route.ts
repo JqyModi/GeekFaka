@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
+import { slugify } from "@/lib/slug";
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   if (!await isAuthenticated()) return new NextResponse("Unauthorized", { status: 401 });
@@ -19,9 +20,13 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
 
   try {
     const body = await req.json();
+    const data = {
+      ...body,
+      slug: typeof body.slug === "string" ? (body.slug.trim() ? slugify(body.slug) : undefined) : undefined,
+    }
     const article = await prisma.article.update({
       where: { id: params.id },
-      data: body
+      data
     });
 
     return NextResponse.json(article);

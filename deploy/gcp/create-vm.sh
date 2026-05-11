@@ -4,7 +4,7 @@ set -euo pipefail
 : "${PROJECT_ID:?Set PROJECT_ID}"
 : "${REGION:?Set REGION, e.g. asia-east1}"
 : "${ZONE:?Set ZONE, e.g. asia-east1-b}"
-: "${INSTANCE_NAME:=geekfaka-prod}"
+: "${INSTANCE_NAME:=geekfaka-sg}"
 : "${STATIC_IP_NAME:=geekfaka-ip}"
 : "${MACHINE_TYPE:=e2-small}"
 : "${BOOT_DISK_SIZE:=30GB}"

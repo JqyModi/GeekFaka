@@ -16,10 +16,10 @@ gcloud auth application-default login
 ## 2. Create the VM
 
 ```bash
-export PROJECT_ID="your-gcp-project-id"
-export REGION="asia-east1"
-export ZONE="asia-east1-b"
-export INSTANCE_NAME="geekfaka-prod"
+export PROJECT_ID="project-15fbbfc1-0507-47d3-aae"
+export REGION="asia-southeast1"
+export ZONE="asia-southeast1-b"
+export INSTANCE_NAME="geekfaka-sg"
 ./deploy/gcp/create-vm.sh
 ```
 
@@ -28,9 +28,9 @@ export INSTANCE_NAME="geekfaka-prod"
 ## 3. Upload the current app
 
 ```bash
-export PROJECT_ID="your-gcp-project-id"
-export ZONE="asia-east1-b"
-export INSTANCE_NAME="geekfaka-prod"
+export PROJECT_ID="project-15fbbfc1-0507-47d3-aae"
+export ZONE="asia-southeast1-b"
+export INSTANCE_NAME="geekfaka-sg"
 ./deploy/gcp/push-app.sh
 ```
 
@@ -61,15 +61,31 @@ vim .env.production
 ## 5. Install the app and enable HTTPS
 
 ```bash
-export PROJECT_ID="your-gcp-project-id"
-export ZONE="asia-east1-b"
-export INSTANCE_NAME="geekfaka-prod"
-export DOMAIN="shop.example.com"
+export PROJECT_ID="project-15fbbfc1-0507-47d3-aae"
+export ZONE="asia-southeast1-b"
+export INSTANCE_NAME="geekfaka-sg"
+export DOMAIN="faka.minai.eu.org"
 export LETSENCRYPT_EMAIL="you@example.com"
 ./deploy/gcp/remote-install.sh
 ```
 
-## 6. First login and Alipay setup
+## 6. Faka App-Only Rollout
+
+如果只是发布发卡站新代码，不重做 HTTPS、不改 Nginx、不碰 `vmq/epay`：
+
+```bash
+export PROJECT_ID="project-15fbbfc1-0507-47d3-aae"
+export ZONE="asia-southeast1-b"
+export INSTANCE_NAME="geekfaka-sg"
+bash ./deploy/gcp/push-app.sh
+bash ./deploy/gcp/redeploy-faka.sh
+```
+
+详细说明见：
+
+- [docs/GCP_FAKA_APP_ONLY_ROLLOUT.md](/Users/modi/Documents/ai-GeminiPro/Codex/OpenFaka/docs/GCP_FAKA_APP_ONLY_ROLLOUT.md)
+
+## 7. First login and Alipay setup
 
 后台地址：
 
@@ -91,7 +107,7 @@ https://你的域名/admin
 https://你的域名/api/payments/alipay/notify
 ```
 
-## 7. Useful commands on the VM
+## 8. Useful commands on the VM
 
 ```bash
 cd /opt/OpenFaka

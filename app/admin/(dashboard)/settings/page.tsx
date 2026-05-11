@@ -201,6 +201,15 @@ export default function SettingsPage() {
                 />
               </div>
               <div className="grid gap-2">
+                <Label>网站描述</Label>
+                <Textarea
+                  value={draftConfig.site_description || ""}
+                  onChange={e => handleChange("site_description", e.target.value)}
+                  placeholder="概括你的核心商品、适用人群和交付方式"
+                  className="min-h-[88px]"
+                />
+              </div>
+              <div className="grid gap-2">
                 <Label>网站 URL (用于支付回调)</Label>
                 <Input 
                   value={draftConfig.site_url || ""}
@@ -209,6 +218,18 @@ export default function SettingsPage() {
                 />
                 <p className="text-xs text-muted-foreground">
                   必须配置正确的域名（包含 https://），否则支付后无法自动发货。
+                </p>
+              </div>
+              <div className="grid gap-2">
+                <Label>站点关键词</Label>
+                <Textarea
+                  value={draftConfig.site_keywords || ""}
+                  onChange={e => handleChange("site_keywords", e.target.value)}
+                  placeholder="每行或逗号分隔，例如：AI提示词, Midjourney模板, 自动发货"
+                  className="min-h-[88px]"
+                />
+                <p className="text-xs text-muted-foreground">
+                  用于全站默认 metadata、robots 与 sitemap 的语义补充。
                 </p>
               </div>
               <div className="grid gap-2">

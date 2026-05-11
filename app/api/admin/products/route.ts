@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
 import { logger } from "@/lib/logger";
+import { slugify } from "@/lib/slug";
 
 const log = logger.child({ module: 'AdminProduct' });
 
@@ -55,15 +56,39 @@ export async function POST(req: Request) {
   if (!await isAuthenticated()) return new NextResponse("Unauthorized", { status: 401 });
 
   try {
-    const { name, description, price, categoryId, deliveryFormat } = await req.json();
+    const {
+      name,
+      slug,
+      tagline,
+      description,
+      price,
+      categoryId,
+      deliveryFormat,
+      seoTitle,
+      seoDescription,
+      searchKeywords,
+      restockThreshold,
+      supplierName,
+      supplierUrl,
+      supplierNotes,
+    } = await req.json();
 
     const product = await prisma.product.create({
       data: {
         name,
+        slug: (slug || name) ? slugify(slug || name) : null,
+        tagline,
         description,
         price,
         categoryId,
-        deliveryFormat: deliveryFormat || "SINGLE"
+        deliveryFormat: deliveryFormat || "SINGLE",
+        seoTitle,
+        seoDescription,
+        searchKeywords,
+        restockThreshold: Number(restockThreshold || 5),
+        supplierName,
+        supplierUrl,
+        supplierNotes,
       }
     });
     

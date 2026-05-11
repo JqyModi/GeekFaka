@@ -9,12 +9,17 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter } from "
 import { Label } from "@/components/ui/label"
 import { Switch } from "@/components/ui/switch"
 import { RichTextEditor } from "@/components/ui/rich-text-editor"
+import { Textarea } from "@/components/ui/textarea"
 
 interface Article {
   id: string
   slug: string
   title: string
+  excerpt: string
   content: string
+  seoTitle: string
+  seoDescription: string
+  focusKeyword: string
   isVisible: boolean
   createdAt: string
   updatedAt: string
@@ -35,7 +40,11 @@ export default function ArticlesPage() {
   const [formData, setFormData] = useState({
     title: "",
     slug: "",
+    excerpt: "",
     content: "",
+    seoTitle: "",
+    seoDescription: "",
+    focusKeyword: "",
     isVisible: true
   })
   const [saving, setSaving] = useState(false)
@@ -49,11 +58,15 @@ export default function ArticlesPage() {
       setFormData({
         title: editingArticle.title,
         slug: editingArticle.slug,
+        excerpt: editingArticle.excerpt || "",
         content: editingArticle.content || "",
+        seoTitle: editingArticle.seoTitle || "",
+        seoDescription: editingArticle.seoDescription || "",
+        focusKeyword: editingArticle.focusKeyword || "",
         isVisible: editingArticle.isVisible
       })
     } else {
-      setFormData({ title: "", slug: "", content: "", isVisible: true })
+      setFormData({ title: "", slug: "", excerpt: "", content: "", seoTitle: "", seoDescription: "", focusKeyword: "", isVisible: true })
     }
   }, [editingArticle])
 
@@ -245,6 +258,45 @@ export default function ArticlesPage() {
                 onCheckedChange={c => setFormData({ ...formData, isVisible: c })} 
               />
               <Label>公开显示</Label>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>摘要</Label>
+              <Textarea
+                value={formData.excerpt}
+                onChange={e => setFormData({ ...formData, excerpt: e.target.value })}
+                placeholder="用于列表页、首页内容区和搜索引擎摘要"
+                className="min-h-[96px]"
+              />
+            </div>
+
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+              <div className="grid gap-2">
+                <Label>SEO 标题</Label>
+                <Input
+                  value={formData.seoTitle}
+                  onChange={e => setFormData({ ...formData, seoTitle: e.target.value })}
+                  placeholder="例如：Midjourney 提示词购买与使用指南"
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label>焦点关键词</Label>
+                <Input
+                  value={formData.focusKeyword}
+                  onChange={e => setFormData({ ...formData, focusKeyword: e.target.value })}
+                  placeholder="例如：midjourney 提示词"
+                />
+              </div>
+            </div>
+
+            <div className="grid gap-2">
+              <Label>SEO 描述</Label>
+              <Textarea
+                value={formData.seoDescription}
+                onChange={e => setFormData({ ...formData, seoDescription: e.target.value })}
+                placeholder="概括这篇内容能解决什么问题、适合谁看"
+                className="min-h-[88px]"
+              />
             </div>
 
             <div className="grid gap-2">

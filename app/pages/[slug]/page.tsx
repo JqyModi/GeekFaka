@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/navbar";
 import ReactMarkdown from "react-markdown";
 import { Metadata } from "next";
+import { getPublicSiteConfig, stripMarkdown, truncateText } from "@/lib/site-config";
 
 interface ArticlePageProps {
   params: {
@@ -11,14 +12,27 @@ interface ArticlePageProps {
 }
 
 export async function generateMetadata({ params }: ArticlePageProps): Promise<Metadata> {
-  const article = await prisma.article.findUnique({
-    where: { slug: params.slug }
-  });
+  const [article, site] = await Promise.all([
+    prisma.article.findUnique({
+      where: { slug: params.slug }
+    }),
+    getPublicSiteConfig(),
+  ])
 
   if (!article) return { title: "Not Found" };
 
+  const description = article.seoDescription
+    || article.excerpt
+    || truncateText(stripMarkdown(article.content || site.description))
+  const title = article.seoTitle || `${article.title} - ${site.title}`
+
   return {
-    title: `${article.title} - AI数字资源站`,
+    title,
+    description,
+    keywords: article.focusKeyword ? [article.focusKeyword] : undefined,
+    alternates: {
+      canonical: `/pages/${article.slug}`,
+    },
   };
 }
 
@@ -41,6 +55,11 @@ export default async function ArticlePage({ params }: ArticlePageProps) {
           <div className="text-sm text-muted-foreground mb-8">
             更新于 {new Date(article.updatedAt).toLocaleDateString()}
           </div>
+          {article.excerpt && (
+            <p className="mb-8 text-lg leading-8 text-muted-foreground not-prose">
+              {article.excerpt}
+            </p>
+          )}
           <ReactMarkdown>{article.content || ""}</ReactMarkdown>
         </article>
       </div>

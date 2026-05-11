@@ -6,6 +6,12 @@ DOMAIN="${2:?Provide domain}"
 LETSENCRYPT_EMAIL="${3:?Provide letsencrypt email}"
 NGINX_SITE="/etc/nginx/sites-available/geekfaka.conf"
 
+if command -v docker-compose >/dev/null 2>&1; then
+  COMPOSE="docker-compose"
+else
+  COMPOSE="docker compose"
+fi
+
 cd "${APP_DIR}"
 
 if [ ! -f .env.production ]; then
@@ -13,7 +19,7 @@ if [ ! -f .env.production ]; then
   exit 1
 fi
 
-docker compose -f docker-compose.prod.yml --env-file .env.production up -d --build
+${COMPOSE} -f docker-compose.prod.yml --env-file .env.production up -d --build
 
 sed "s/__DOMAIN__/${DOMAIN}/g" deploy/nginx/geekfaka.conf | tee "${NGINX_SITE}" >/dev/null
 ln -sf "${NGINX_SITE}" /etc/nginx/sites-enabled/geekfaka.conf

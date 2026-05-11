@@ -1,21 +1,26 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import Link from "next/link"
+import { useSearchParams } from "next/navigation"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
-import { ShoppingCart, Loader2, Zap, Package, CreditCard, Wallet, Ticket, Check, X } from "lucide-react"
+import { ShoppingCart, Loader2, Package, CreditCard, Ticket, Check, X, Wallet } from "lucide-react"
 import { cn } from "@/lib/utils"
 import ReactMarkdown from "react-markdown"
+import { readAttribution, trackGrowthEvent } from "@/components/attribution-tracker"
 
 interface Product {
   id: string
+  slug?: string | null
   name: string
+  tagline?: string | null
   description: string | null
   price: string
   stock: number
@@ -36,9 +41,11 @@ interface PaymentChannel {
 }
 
 export function StoreFront({ categories }: { categories: Category[] }) {
+  const searchParams = useSearchParams()
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null)
   const [isBuyOpen, setIsBuyOpen] = useState(false)
   const [loading, setLoading] = useState(false)
+  const [autoOpenedBuyTarget, setAutoOpenedBuyTarget] = useState<string | null>(null)
   
   // Payment Channels
   const [channels, setChannels] = useState<PaymentChannel[]>([])
@@ -134,10 +141,30 @@ export function StoreFront({ categories }: { categories: Category[] }) {
   }
 
   const handleBuyClick = (product: Product) => {
+    trackGrowthEvent("checkout_open", {
+      productId: product.id,
+      productSlug: product.slug,
+      productName: product.name,
+      price: product.price,
+    })
     setSelectedProduct(product)
     setQuantity(1)
     setIsBuyOpen(true)
   }
+
+  useEffect(() => {
+    const buyTarget = searchParams.get("buy")
+    if (!buyTarget || isBuyOpen || buyTarget === autoOpenedBuyTarget) return
+
+    const matchedProduct = categories
+      .flatMap((category) => category.products)
+      .find((product) => product.slug === buyTarget || product.id === buyTarget)
+
+    if (matchedProduct) {
+      setAutoOpenedBuyTarget(buyTarget)
+      handleBuyClick(matchedProduct)
+    }
+  }, [autoOpenedBuyTarget, categories, isBuyOpen, searchParams])
 
   const handlePurchase = async () => {
     if (!selectedProduct) return
@@ -154,6 +181,14 @@ export function StoreFront({ categories }: { categories: Category[] }) {
 
     setEmailError("")
     setLoading(true)
+    trackGrowthEvent("checkout_submit", {
+      productId: selectedProduct.id,
+      productSlug: selectedProduct.slug,
+      productName: selectedProduct.name,
+      quantity,
+      paymentMethod,
+      total: finalTotal.toFixed(2),
+    })
 
     try {
       // Find the provider for the selected channel
@@ -172,6 +207,10 @@ export function StoreFront({ categories }: { categories: Category[] }) {
         email: email, 
         paymentMethod: providerName,
         couponCode: appliedCoupon?.code,
+        attribution: readAttribution() || {
+          landingPath: `${window.location.pathname}${window.location.search}`,
+          referrer: document.referrer || "",
+        },
         options: {
           channel: selectedPaymentChannel
         }
@@ -265,15 +304,22 @@ export function StoreFront({ categories }: { categories: Category[] }) {
                        <div className="text-sm text-muted-foreground line-clamp-6">
                          <ReactMarkdown>{product.description || "暂无详细描述"}</ReactMarkdown>
                        </div>
-                      <Button 
-                        variant="outline" 
-                        className="theme-outline-button mt-4"
-                         onClick={(e) => {
-                           handleBuyClick(product)
-                         }}
-                       >
-                         查看详情 & 购买
-                       </Button>
+                      <div className="mt-4 flex flex-wrap items-center justify-center gap-3">
+                        {product.slug && (
+                          <Button asChild variant="ghost" className="theme-outline-button">
+                            <Link href={`/products/${product.slug}`}>详情页</Link>
+                          </Button>
+                        )}
+                        <Button
+                          variant="outline"
+                          className="theme-outline-button"
+                          onClick={() => {
+                            handleBuyClick(product)
+                          }}
+                        >
+                          查看详情 & 购买
+                        </Button>
+                      </div>
                     </div>
 
                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
@@ -282,8 +328,9 @@ export function StoreFront({ categories }: { categories: Category[] }) {
                       <CardTitle className="text-xl font-bold leading-tight line-clamp-2 min-h-[3rem]">
                         {product.name}
                       </CardTitle>
-                      {/* Hide description in default view to keep it clean */}
-                      <div className="h-[2.5rem]" /> 
+                      <CardDescription className="line-clamp-2 min-h-[2.5rem] text-sm">
+                        {product.tagline || "自动交付，适合即买即用的数字资源场景。"}
+                      </CardDescription>
                     </CardHeader>
                     
                     <CardContent>
@@ -303,15 +350,22 @@ export function StoreFront({ categories }: { categories: Category[] }) {
                     </CardContent>
                     
                     <CardFooter>
-                      <Button 
-                        className="theme-cta-button w-full font-semibold transition-all" 
-                        disabled={product.stock <= 0}
-                        onClick={() => handleBuyClick(product)}
-                        size="lg"
-                      >
-                        <ShoppingCart className="mr-2 h-4 w-4" /> 
-                        {product.stock > 0 ? "立即购买" : "已售罄"}
-                      </Button>
+                      <div className="flex w-full gap-2">
+                        {product.slug && (
+                          <Button asChild variant="outline" className="theme-outline-button flex-1" size="lg">
+                            <Link href={`/products/${product.slug}`}>详情页</Link>
+                          </Button>
+                        )}
+                        <Button
+                          className="theme-cta-button flex-1 font-semibold transition-all"
+                          disabled={product.stock <= 0}
+                          onClick={() => handleBuyClick(product)}
+                          size="lg"
+                        >
+                          <ShoppingCart className="mr-2 h-4 w-4" />
+                          {product.stock > 0 ? "立即购买" : "已售罄"}
+                        </Button>
+                      </div>
                     </CardFooter>
                   </Card>
                 ))}

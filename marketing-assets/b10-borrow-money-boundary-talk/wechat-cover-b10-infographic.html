@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=900, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 900px;
+      height: 383px;
+      overflow: hidden;
+      font-family: "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+      color: #231f18;
+      background: #fff7e8;
+    }
+    .cover {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 24px 34px 22px;
+      background:
+        radial-gradient(circle at 10% 10%, rgba(249, 180, 182, .36), transparent 24%),
+        radial-gradient(circle at 92% 16%, rgba(156, 210, 214, .44), transparent 22%),
+        linear-gradient(135deg, #fff8ea 0%, #f5ecd9 100%);
+    }
+    .border {
+      position: absolute;
+      inset: 15px;
+      border: 4px solid #4b4132;
+      border-radius: 24px;
+    }
+    .head {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+    }
+    .kicker {
+      font-size: 24px;
+      font-weight: 950;
+      color: #6a5c4d;
+    }
+    h1 {
+      margin: 2px 0 0;
+      font-size: 52px;
+      line-height: .98;
+      letter-spacing: -0.05em;
+      font-weight: 950;
+      color: #2f8b90;
+    }
+    h1 span { color: #e1685e; }
+    .grid {
+      position: relative;
+      z-index: 1;
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+    .card {
+      min-height: 112px;
+      padding: 14px 15px;
+      border-radius: 18px;
+      background: rgba(255,255,248,.82);
+      box-shadow: 0 3px 0 rgba(75,65,50,.18);
+    }
+    .num {
+      display: inline-grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      margin-right: 8px;
+      border: 3px solid #665c4f;
+      border-radius: 50%;
+      background: #a7d9d6;
+      font-size: 21px;
+      font-weight: 950;
+      vertical-align: middle;
+    }
+    .card:nth-child(2) .num { background: #f5c0c4; }
+    .card:nth-child(3) .num { background: #f4cf77; }
+    .title {
+      display: inline;
+      font-size: 27px;
+      font-weight: 950;
+      vertical-align: middle;
+    }
+    .desc {
+      margin-top: 10px;
+      font-size: 19px;
+      line-height: 1.22;
+      font-weight: 850;
+      color: #4b4132;
+    }
+    .pill {
+      position: absolute;
+      z-index: 1;
+      left: 50%;
+      bottom: 18px;
+      transform: translateX(-50%);
+      padding: 7px 22px;
+      border: 3px solid #4b4132;
+      border-radius: 999px;
+      background: #f3a872;
+      color: #fffaf0;
+      font-size: 22px;
+      font-weight: 950;
+      box-shadow: 0 4px 0 rgba(75,65,50,.2);
+    }
+  </style>
+</head>
+<body>
+  <main class="cover">
+    <div class="border"></div>
+    <section class="head">
+      <div class="kicker">关系边界话术</div>
+      <h1>别人借钱时，照着这 <span>9 句</span> 回</h1>
+    </section>
+    <section class="grid">
+      <div class="card"><span class="num">1</span><span class="title">委婉拒绝</span><div class="desc">最近我这边也紧，暂时帮不上你。</div></div>
+      <div class="card"><span class="num">2</span><span class="title">被追问时</span><div class="desc">不是金额的问题，是我不再借钱出去。</div></div>
+      <div class="card"><span class="num">3</span><span class="title">结束拉扯</span><div class="desc">我珍惜关系，所以提前说清边界。</div></div>
+    </section>
+    <div class="pill">不撕破脸，也不委屈自己</div>
+  </main>
+</body>
+</html>
+

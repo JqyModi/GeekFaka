@@ -17,6 +17,11 @@ interface Order {
   status: string
   quantity: number
   paymentMethod: string | null
+  utmSource?: string | null
+  utmMedium?: string | null
+  utmCampaign?: string | null
+  landingPath?: string | null
+  referrer?: string | null
   createdAt: string
   paidAt: string | null
   product: {
@@ -215,6 +220,7 @@ export default function OrdersPage() {
                 <TableHead>商品</TableHead>
                 <TableHead>金额</TableHead>
                 <TableHead>状态</TableHead>
+                <TableHead>来源</TableHead>
                 <TableHead>支付方式</TableHead>
                 <TableHead>时间</TableHead>
                 <TableHead className="text-right">操作</TableHead>
@@ -223,13 +229,13 @@ export default function OrdersPage() {
             <TableBody>
               {loading ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-32 text-center">
+                  <TableCell colSpan={8} className="h-32 text-center">
                     <Loader2 className="mx-auto h-6 w-6 animate-spin text-primary" />
                   </TableCell>
                 </TableRow>
               ) : orders.length === 0 ? (
                 <TableRow>
-                  <TableCell colSpan={7} className="h-32 text-center text-muted-foreground">
+                  <TableCell colSpan={8} className="h-32 text-center text-muted-foreground">
                     暂无订单数据
                   </TableCell>
                 </TableRow>
@@ -253,6 +259,18 @@ export default function OrdersPage() {
                     </TableCell>
                     <TableCell>
                       {getStatusBadge(order.status)}
+                    </TableCell>
+                    <TableCell className="max-w-[160px] text-xs">
+                      {order.utmSource ? (
+                        <div className="space-y-1">
+                          <Badge variant="outline">{order.utmSource}</Badge>
+                          <div className="truncate text-muted-foreground" title={order.utmCampaign || ""}>
+                            {order.utmCampaign || order.utmMedium || "-"}
+                          </div>
+                        </div>
+                      ) : (
+                        <span className="text-muted-foreground">direct</span>
+                      )}
                     </TableCell>
                     <TableCell className="text-xs text-muted-foreground uppercase">
                       {order.paymentMethod || "-"}

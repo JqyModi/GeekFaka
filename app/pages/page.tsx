@@ -1,15 +1,16 @@
 import { prisma } from "@/lib/prisma";
 import { Navbar } from "@/components/navbar";
 import Link from "next/link";
-import { FileText, ChevronRight, BookOpen } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { ChevronRight, BookOpen } from "lucide-react";
+import { Card, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import { stripMarkdown, truncateText } from "@/lib/site-config";
 
 export const dynamic = "force-dynamic";
 
 export default async function HelpCenterPage() {
   const articles = await prisma.article.findMany({
     where: { isVisible: true },
-    orderBy: { createdAt: "asc" }
+    orderBy: { updatedAt: "desc" }
   });
 
   return (
@@ -43,6 +44,9 @@ export default async function HelpCenterPage() {
                       <CardDescription>
                         更新于 {new Date(article.updatedAt).toLocaleDateString()}
                       </CardDescription>
+                      <p className="line-clamp-2 text-sm text-muted-foreground">
+                        {article.excerpt || truncateText(stripMarkdown(article.content), 120)}
+                      </p>
                     </div>
                     <ChevronRight className="h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-1 transition-all" />
                   </CardHeader>

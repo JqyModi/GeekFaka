@@ -10,6 +10,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { StockManager } from "@/components/admin/stock-manager"
 import { RichTextEditor } from "@/components/ui/rich-text-editor"
@@ -22,12 +23,21 @@ interface Category {
 interface Product {
   id: string
   name: string
+  slug?: string | null
+  tagline?: string | null
   description: string | null
   price: string
   categoryId: string
   category: Category
   isActive: boolean
   deliveryFormat: string
+  seoTitle?: string | null
+  seoDescription?: string | null
+  searchKeywords?: string | null
+  restockThreshold?: number
+  supplierName?: string | null
+  supplierUrl?: string | null
+  supplierNotes?: string | null
   _count: {
     licenses: number
   }
@@ -53,10 +63,19 @@ export default function ProductsPage() {
   const [editingProduct, setEditingProduct] = useState<Product | null>(null)
   const [formData, setFormData] = useState({
     name: "",
+    slug: "",
+    tagline: "",
     description: "",
     price: "",
     categoryId: "",
-    deliveryFormat: "SINGLE"
+    deliveryFormat: "SINGLE",
+    seoTitle: "",
+    seoDescription: "",
+    searchKeywords: "",
+    restockThreshold: "5",
+    supplierName: "",
+    supplierUrl: "",
+    supplierNotes: "",
   })
 
   useEffect(() => {
@@ -99,19 +118,37 @@ export default function ProductsPage() {
       setEditingProduct(product)
       setFormData({
         name: product.name,
+        slug: product.slug || "",
+        tagline: product.tagline || "",
         description: product.description || "",
         price: product.price,
         categoryId: product.categoryId,
-        deliveryFormat: product.deliveryFormat || "SINGLE"
+        deliveryFormat: product.deliveryFormat || "SINGLE",
+        seoTitle: product.seoTitle || "",
+        seoDescription: product.seoDescription || "",
+        searchKeywords: product.searchKeywords || "",
+        restockThreshold: String(product.restockThreshold || 5),
+        supplierName: product.supplierName || "",
+        supplierUrl: product.supplierUrl || "",
+        supplierNotes: product.supplierNotes || "",
       })
     } else {
       setEditingProduct(null)
       setFormData({
         name: "",
+        slug: "",
+        tagline: "",
         description: "",
         price: "",
         categoryId: categories[0]?.id || "",
-        deliveryFormat: "SINGLE"
+        deliveryFormat: "SINGLE",
+        seoTitle: "",
+        seoDescription: "",
+        searchKeywords: "",
+        restockThreshold: "5",
+        supplierName: "",
+        supplierUrl: "",
+        supplierNotes: "",
       })
     }
     setIsDialogOpen(true)
@@ -241,8 +278,13 @@ export default function ProductsPage() {
                           <code className="text-[10px] bg-muted px-1.5 py-0.5 rounded text-muted-foreground font-mono select-all">
                             ID: {product.id}
                           </code>
+                          {product.slug && (
+                            <code className="text-[10px] bg-primary/10 px-1.5 py-0.5 rounded text-primary font-mono select-all">
+                              /products/{product.slug}
+                            </code>
+                          )}
                           <span className="text-xs text-muted-foreground/60 line-clamp-1 italic font-medium">
-                            {product.description || "暂无描述"}
+                            {product.tagline || product.description || "暂无描述"}
                           </span>
                         </div>
                       </div>
@@ -378,6 +420,25 @@ export default function ProductsPage() {
                   />
                 </div>
                 <div className="grid gap-2">
+                  <Label htmlFor="slug">详情页 Slug</Label>
+                  <Input
+                    id="slug"
+                    value={formData.slug}
+                    onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                    placeholder="例如：midjourney-poster-prompts"
+                  />
+                  <p className="text-[10px] text-muted-foreground">留空会按商品名称自动生成，用于 `/products/[slug]` 落地页</p>
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="tagline">短卖点</Label>
+                  <Input
+                    id="tagline"
+                    value={formData.tagline}
+                    onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
+                    placeholder="例如：电商主图/海报/社媒封面一包搞定"
+                  />
+                </div>
+                <div className="grid gap-2">
                   <Label htmlFor="categoryId">所属分类</Label>
                   <Select 
                     value={formData.categoryId} 
@@ -408,6 +469,16 @@ export default function ProductsPage() {
                     />
                   </div>
                 </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="restockThreshold">补货阈值</Label>
+                  <Input
+                    id="restockThreshold"
+                    type="number"
+                    min="0"
+                    value={formData.restockThreshold}
+                    onChange={(e) => setFormData({ ...formData, restockThreshold: e.target.value })}
+                  />
+                </div>
 
                 <div className="grid gap-2">
                   <Label>发货格式</Label>
@@ -429,13 +500,85 @@ export default function ProductsPage() {
                   <p className="text-[10px] text-muted-foreground">影响用户查收卡密时的展示方式</p>
                 </div>
 
+                <div className="space-y-4 rounded-xl border border-border/60 bg-muted/20 p-4">
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-semibold text-white">SEO 与搜索词</h3>
+                    <p className="text-[10px] text-muted-foreground">给商品详情页和站内搜索准备语义信息</p>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="seoTitle">SEO 标题</Label>
+                    <Input
+                      id="seoTitle"
+                      value={formData.seoTitle}
+                      onChange={(e) => setFormData({ ...formData, seoTitle: e.target.value })}
+                      placeholder="例如：Midjourney 海报提示词包 | 电商主图/封面素材"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="seoDescription">SEO 描述</Label>
+                    <Textarea
+                      id="seoDescription"
+                      value={formData.seoDescription}
+                      onChange={(e) => setFormData({ ...formData, seoDescription: e.target.value })}
+                      placeholder="一句话概括适用人群、场景和交付结果"
+                      className="min-h-[88px]"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="searchKeywords">关键词</Label>
+                    <Textarea
+                      id="searchKeywords"
+                      value={formData.searchKeywords}
+                      onChange={(e) => setFormData({ ...formData, searchKeywords: e.target.value })}
+                      placeholder="每行或逗号分隔，例如：midjourney prompt, 海报提示词, 电商主图"
+                      className="min-h-[88px]"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-4 rounded-xl border border-border/60 bg-muted/20 p-4">
+                  <div className="space-y-1">
+                    <h3 className="text-sm font-semibold text-white">供货与补货</h3>
+                    <p className="text-[10px] text-muted-foreground">记录供货源、补货规则与备注，方便你只做监控</p>
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="supplierName">供货来源</Label>
+                    <Input
+                      id="supplierName"
+                      value={formData.supplierName}
+                      onChange={(e) => setFormData({ ...formData, supplierName: e.target.value })}
+                      placeholder="例如：自有内容库 / 授权代理 / 外部供应商"
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="supplierUrl">供货链接</Label>
+                    <Input
+                      id="supplierUrl"
+                      value={formData.supplierUrl}
+                      onChange={(e) => setFormData({ ...formData, supplierUrl: e.target.value })}
+                      placeholder="https://..."
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="supplierNotes">补货备注</Label>
+                    <Textarea
+                      id="supplierNotes"
+                      value={formData.supplierNotes}
+                      onChange={(e) => setFormData({ ...formData, supplierNotes: e.target.value })}
+                      placeholder="例如：库存低于阈值时，先补中文版本，再补英文版本"
+                      className="min-h-[96px]"
+                    />
+                  </div>
+                </div>
+
                 <div className="pt-4">
                    <p className="text-xs text-muted-foreground leading-relaxed">
                      提示：<br/>
                      1. 商品创建后默认为上架状态。<br/>
                      2. 请在“库存管理”中添加卡密。<br/>
                      3. 描述支持图片和超链接。<br/>
-                     4. 请务必按所选格式添加卡密。
+                     4. 请务必按所选格式添加卡密。<br/>
+                     5. `SEO 标题/描述/关键词` 会直接影响商品详情页收录与站内复用。
                    </p>
                 </div>
               </div>

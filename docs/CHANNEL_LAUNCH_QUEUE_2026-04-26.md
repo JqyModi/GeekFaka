@@ -30,6 +30,9 @@
 | B08 | 微信公众号 | 这 5 句话，帮你少吃很多哑巴亏 | 暂不放裸商品链接，优先关注/回复 `省心` | HOLD_QUALITY_REWORK |
 | B09 | 小红书 | 这5句AI提示词，关键时候真能少吃亏 | 不放外链，优先评论 `省心` | PUBLISHED_LOW_TRACTION_REWORK |
 | B10 | 小红书 | 别人借钱时，照着这9句话回 | 不放外链，优先评论 `借钱`，承接 30 句完整版 | PUBLISHED |
+| B10 | 微信公众号 | 别人借钱时，照着这 9 句话回 | 不放裸商品链接，优先关注/回复 `借钱` | PUBLISH_BLOCKED_WECHAT_ADMIN_VERIFY |
+| B10 | 知乎 | 如何优雅地拒绝别人借钱？ | 不放外链，先拿搜索曝光和账号信任 | PUBLISHED |
+| B10 | Pinterest | How to say no when someone asks to borrow money | `https://faka.minai.eu.org/?utm_source=pinterest&utm_medium=social&utm_campaign=boundary_scripts&utm_content=pin_b10` | DRAFT_SAVED_PUBLISH_BUTTON_NOOP |
 
 ## 执行规则
 
@@ -64,6 +67,9 @@
 
 | 时间 | 渠道 | 结果 |
 | --- | --- | --- |
+| 2026-05-02 08:21 | 知乎 | B10 已发布到高意图问题 `如何优雅地拒绝别人借钱？`，问题约 `319.9万` 浏览、`4628` 关注；发布后发现富文本编辑器残留导致内容叠加，已通过知乎 API `PUT /api/v4/answers/2033822609251488007` 修正为干净版本。链接：`https://www.zhihu.com/question/32286949/answer/2033822609251488007`。不放外链，先拿站内搜索曝光和账号信任。 |
+| 2026-05-02 08:21 | Pinterest | B10 已创建新图板 `Life Scripts & Boundaries`，Pin 图片、英文标题、描述和 UTM 链接已保存为草稿；发布按钮继续复现前次 Pinterest 前端无响应问题，状态 `DRAFT_SAVED_PUBLISH_BUTTON_NOOP`。后续不在同一 UI 反复耗时，优先换浏览器会话/API 或手动确认一次。 |
+| 2026-05-02 08:21 | 微信公众号 | B10 正文已从 Markdown 逐句空行改为紧凑段落排版，封面已绑定为横版信息图；点击发表后通过两轮确认，当前卡在 `微信验证：扫码后，请联系管理员进行验证`。需要管理员/运营者微信扫码后继续完成发布。 |
 | 2026-05-01 18:55 | 封面复盘 | 用户反馈当前封面存在明显版式问题：上方文字拥挤、中部大面积空白、底部信息散落。已参考高表现封面重做 B10 满版信息图封面 `marketing-assets/b10-borrow-money-boundary-talk/xhs-cover-b10-infographic.png`。后续封面规则调整为：顶部标题居中，主体双列信息块填满画面，配边框/小图标/侧边短句，优先让封面本身成为可收藏资料。 |
 | 2026-05-01 18:35 | 小红书 | B10 已发布成功，发布页返回 `publish/success`。素材：`marketing-assets/b10-borrow-money-boundary-talk/`；标题 `别人借钱时，照着这9句话回`；图片为强钩子封面 + 9 句话收藏卡 + 3 个拒绝原则卡；正文不放外链，CTA 为评论 `借钱`。已同步补齐承接素材 `public/digital-products/freebies/borrow-money-boundary-lines-preview.md`，包含 30 句完整版。 |
 | 2026-05-01 01:20 | 内容策略 | 用户反馈小红书 B09 仅 1 个播放，判断核心问题是推文质量不足，不能勾起收藏、分享、评论欲望。已暂停继续发布同类泛 AI 提示词内容，新增爆款拆解文档 `docs/VIRAL_CONTENT_PLAYBOOK_WECHAT_2026-05-01.md`；B08 改为 `HOLD_QUALITY_REWORK`，B09 改为 `PUBLISHED_LOW_TRACTION_REWORK`。下一步改做“明确人群 + 高频痛点 + 数字化资产 + 立刻可用结果”的可收藏内容。 |

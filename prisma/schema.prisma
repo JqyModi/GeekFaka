@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
   binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
 }
 
@@ -36,78 +36,170 @@ model Category {
 }
 
 model Product {
-  id             String    @id @default(cuid())
-  name           String
-  description    String?
-  price          Decimal
-  categoryId     String
-  category       Category  @relation(fields: [categoryId], references: [id])
-  licenses       License[]
-  orders         Order[]
-  coupons        Coupon[]
-  deliveryFormat String    @default("SINGLE") // SINGLE, ACCOUNT_PASS, ACCOUNT_FULL, PROXY_IP, VIRTUAL_CARD
-  
-  isActive       Boolean   @default(true)
-  createdAt      DateTime  @default(now())
-  updatedAt      DateTime  @updatedAt
+  id               String               @id @default(cuid())
+  name             String
+  description      String?
+  price            Decimal
+  categoryId       String
+  category         Category             @relation(fields: [categoryId], references: [id])
+  licenses         License[]
+  orders           Order[]
+  coupons          Coupon[]
+  deliveryFormat   String               @default("SINGLE") // SINGLE, ACCOUNT_PASS, ACCOUNT_FULL, PROXY_IP, VIRTUAL_CARD
+  slug             String?              @unique
+  tagline          String?
+  seoTitle         String?
+  seoDescription   String?
+  searchKeywords   String?
+  restockThreshold Int                  @default(5)
+  supplierName     String?
+  supplierUrl      String?
+  supplierNotes    String?
+  opportunities    ProductOpportunity[]
+  isActive         Boolean              @default(true)
+  createdAt        DateTime             @default(now())
+  updatedAt        DateTime             @updatedAt
 }
 
 model License {
-  id          String   @id @default(cuid())
-  code        String   // The actual card content/key
-  productId   String
-  product     Product  @relation(fields: [productId], references: [id])
-  status      String   @default("AVAILABLE") // AVAILABLE, SOLD, LOCKED
-  orderId     String?
-  order       Order?   @relation(fields: [orderId], references: [id])
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id        String   @id @default(cuid())
+  code      String // The actual card content/key
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  status    String   @default("AVAILABLE") // AVAILABLE, SOLD, LOCKED
+  orderId   String?
+  order     Order?   @relation(fields: [orderId], references: [id])
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model Order {
-  id            String    @id @default(cuid())
-  orderNo       String    @unique // Readable order number
-  email         String?   // Contact info
-  totalAmount   Decimal
-  status        String    @default("PENDING") // PENDING, PAID, FAILED, EXPIRED
-  productId     String
-  product       Product   @relation(fields: [productId], references: [id])
-  quantity      Int       @default(1)
-  licenses      License[]
-  paymentMethod String?
+  id             String    @id @default(cuid())
+  orderNo        String    @unique // Readable order number
+  email          String? // Contact info
+  totalAmount    Decimal
+  status         String    @default("PENDING") // PENDING, PAID, FAILED, EXPIRED
+  productId      String
+  product        Product   @relation(fields: [productId], references: [id])
+  quantity       Int       @default(1)
+  licenses       License[]
+  paymentMethod  String?
   paymentChannel String?
   paymentTradeNo String?
-  paymentAmount Decimal?
-  paidAt        DateTime?
-  emailSent     Boolean   @default(false)
-  couponId      String?   @unique
-  coupon        Coupon?   @relation(fields: [couponId], references: [id])
-  
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  paymentAmount  Decimal?
+  utmSource      String?
+  utmMedium      String?
+  utmCampaign    String?
+  utmContent     String?
+  landingPath    String?
+  referrer       String?
+  paidAt         DateTime?
+  emailSent      Boolean   @default(false)
+  couponId       String?   @unique
+  coupon         Coupon?   @relation(fields: [couponId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model GrowthEvent {
+  id          String   @id @default(cuid())
+  type        String
+  path        String
+  productSlug String?
+  productId   String?
+  utmSource   String?
+  utmMedium   String?
+  utmCampaign String?
+  utmContent  String?
+  referrer    String?
+  sessionId   String?
+  visitorId   String?
+  userAgent   String?
+  ipHash      String?
+  metadata    String?
+  createdAt   DateTime @default(now())
+
+  @@index([type, createdAt])
+  @@index([utmSource, createdAt])
+  @@index([productSlug, createdAt])
 }
 
 model Coupon {
-  id             String    @id @default(cuid())
-  code           String    @unique
-  discountType   String    @default("FIXED") // FIXED, PERCENTAGE
-  discountValue  Decimal?  @default(0)
-  productId      String?   // Optional: only valid for this product
-  product        Product?  @relation(fields: [productId], references: [id])
-  categoryId     String?   // Optional: only valid for this category
-  category       Category? @relation(fields: [categoryId], references: [id])
-  isUsed         Boolean   @default(false)
-  order          Order?
-  createdAt      DateTime  @default(now())
-  usedAt         DateTime?
+  id            String    @id @default(cuid())
+  code          String    @unique
+  discountType  String    @default("FIXED") // FIXED, PERCENTAGE
+  discountValue Decimal?  @default(0)
+  productId     String? // Optional: only valid for this product
+  product       Product?  @relation(fields: [productId], references: [id])
+  categoryId    String? // Optional: only valid for this category
+  category      Category? @relation(fields: [categoryId], references: [id])
+  isUsed        Boolean   @default(false)
+  order         Order?
+  createdAt     DateTime  @default(now())
+  usedAt        DateTime?
 }
 
 model Article {
-  id        String   @id @default(cuid())
-  slug      String   @unique
-  title     String
-  content   String?
-  isVisible Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String        @id @default(cuid())
+  slug           String        @unique
+  title          String
+  excerpt        String?
+  content        String?
+  seoTitle       String?
+  seoDescription String?
+  focusKeyword   String?
+  contentTasks   ContentTask[]
+  isVisible      Boolean       @default(true)
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+}
+
+model ProductOpportunity {
+  id                 String        @id @default(cuid())
+  title              String
+  slug               String        @unique
+  stage              String        @default("DISCOVERY") // DISCOVERY, VALIDATING, READY, LISTED, RESTOCKING, RETIRED
+  status             String        @default("ACTIVE") // ACTIVE, PARKED, WON, LOST
+  categoryLabel      String?
+  audience           String?
+  demandScore        Int           @default(0)
+  marginScore        Int           @default(0)
+  competitionScore   Int           @default(0)
+  speedScore         Int           @default(0)
+  confidenceScore    Int           @default(0)
+  riskLevel          String        @default("LOW") // LOW, MEDIUM, HIGH
+  suggestedPrice     Decimal?
+  monthlyRevenueGoal Decimal?
+  targetDailySales   Int?
+  sourceUrl          String?
+  evidenceSummary    String?
+  sourcingPlan       String?
+  keywords           String?
+  distributionPlan   String?
+  nextAction         String?
+  complianceNotes    String?
+  productId          String?
+  product            Product?      @relation(fields: [productId], references: [id])
+  contentTasks       ContentTask[]
+  createdAt          DateTime      @default(now())
+  updatedAt          DateTime      @updatedAt
+}
+
+model ContentTask {
+  id            String              @id @default(cuid())
+  title         String
+  channel       String              @default("ARTICLE") // ARTICLE, SEO_PAGE, GEO, REDNOTE, X, EMAIL, COMMUNITY
+  stage         String              @default("TODO") // TODO, DRAFT, READY, PUBLISHED, PAUSED
+  keyword       String?
+  draftTitle    String?
+  draftSummary  String?
+  publishedUrl  String?
+  notes         String?
+  opportunityId String?
+  opportunity   ProductOpportunity? @relation(fields: [opportunityId], references: [id])
+  articleId     String?
+  article       Article?            @relation(fields: [articleId], references: [id])
+  createdAt     DateTime            @default(now())
+  updatedAt     DateTime            @updatedAt
 }

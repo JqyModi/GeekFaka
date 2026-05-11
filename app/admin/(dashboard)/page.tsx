@@ -95,6 +95,7 @@ export default async function DashboardPage() {
       id: true,
       name: true,
       price: true,
+      restockThreshold: true,
       _count: {
         select: { licenses: { where: { status: "AVAILABLE" } } }
       }
@@ -102,8 +103,8 @@ export default async function DashboardPage() {
   });
 
   const lowStockProducts = productsWithStock
-    .map(p => ({ ...p, stock: p._count.licenses }))
-    .filter(p => p.stock < 10)
+    .map(p => ({ ...p, stock: p._count.licenses, restockThreshold: p.restockThreshold || 5 }))
+    .filter(p => p.stock <= p.restockThreshold)
     .sort((a, b) => a.stock - b.stock)
     .slice(0, 5);
 
@@ -200,7 +201,7 @@ export default async function DashboardPage() {
                   <div key={p.id} className="flex items-center justify-between border-b border-border/50 last:border-0 pb-3 last:pb-0">
                     <div className="flex-1 min-w-0 pr-4">
                       <p className="text-sm font-medium truncate">{p.name}</p>
-                      <p className="text-xs text-muted-foreground">单价: ¥{Number(p.price).toFixed(2)}</p>
+                      <p className="text-xs text-muted-foreground">单价: ¥{Number(p.price).toFixed(2)} / 阈值: {p.restockThreshold}</p>
                     </div>
                     <div className={p.stock === 0 ? "text-red-500 font-bold" : "text-yellow-500 font-bold"}>
                       {p.stock === 0 ? "已售罄" : `剩 ${p.stock} 件`}

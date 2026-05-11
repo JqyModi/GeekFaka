@@ -5,12 +5,52 @@ import { logger } from "@/lib/logger";
 
 const log = logger.child({ module: 'OrderCreate' });
 
+function cleanAttribution(value: unknown) {
+  if (!value || typeof value !== "object") return {}
+
+  const source = value as Record<string, unknown>
+  const pick = (key: string, max = 500) => {
+    const item = source[key]
+    return typeof item === "string" && item.trim()
+      ? item.trim().slice(0, max)
+      : undefined
+  }
+
+  return {
+    utmSource: pick("utmSource", 120),
+    utmMedium: pick("utmMedium", 120),
+    utmCampaign: pick("utmCampaign", 180),
+    utmContent: pick("utmContent", 180),
+    landingPath: pick("landingPath", 500),
+    referrer: pick("referrer", 500),
+  }
+}
+
+function cleanGrowthIdentity(value: unknown) {
+  if (!value || typeof value !== "object") return {}
+
+  const source = value as Record<string, unknown>
+  const pick = (key: string, max = 120) => {
+    const item = source[key]
+    return typeof item === "string" && item.trim()
+      ? item.trim().slice(0, max)
+      : undefined
+  }
+
+  return {
+    visitorId: pick("visitorId"),
+    sessionId: pick("sessionId"),
+  }
+}
+
 export async function POST(req: Request) {
   try {
     const body = await req.json();
-    const { productId, quantity = 1, email, paymentMethod = "epay", couponCode, options } = body;
+    const { productId, quantity = 1, email, paymentMethod = "epay", couponCode, options, attribution } = body;
+    const attributionData = cleanAttribution(attribution);
+    const growthIdentity = cleanGrowthIdentity(attribution);
 
-    log.info({ productId, quantity, email, paymentMethod, couponCode }, "Order creation attempt");
+    log.info({ productId, quantity, email, paymentMethod, couponCode, attribution: attributionData }, "Order creation attempt");
 
     if (!productId || !email) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -89,12 +129,39 @@ export async function POST(req: Request) {
           totalAmount,
           paymentMethod,
           status: "PENDING",
-          couponId: validCouponId
+          couponId: validCouponId,
+          ...attributionData,
         }
       });
     });
     
     log.info({ orderNo, totalAmount }, "Order created in DB");
+
+    try {
+      await prisma.growthEvent.create({
+        data: {
+          type: "order_created",
+          path: attributionData.landingPath || "/",
+          productId,
+          productSlug: product.slug || null,
+          utmSource: attributionData.utmSource,
+          utmMedium: attributionData.utmMedium,
+          utmCampaign: attributionData.utmCampaign,
+          utmContent: attributionData.utmContent,
+          referrer: attributionData.referrer,
+          visitorId: growthIdentity.visitorId,
+          sessionId: growthIdentity.sessionId,
+          metadata: JSON.stringify({
+            orderNo,
+            quantity,
+            totalAmount,
+            paymentMethod,
+          }),
+        },
+      });
+    } catch (eventError) {
+      log.warn({ err: eventError, orderNo }, "Failed to record growth order event");
+    }
 
     // 5. Initiate Payment
     try {

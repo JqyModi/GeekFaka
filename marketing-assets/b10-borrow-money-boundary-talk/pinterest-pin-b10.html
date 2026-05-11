@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=1000, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      width: 1000px;
+      height: 1500px;
+      overflow: hidden;
+      font-family: "Avenir Next", "Trebuchet MS", sans-serif;
+      color: #211f18;
+      background: #fff7e8;
+    }
+    .pin {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      padding: 42px 48px;
+      background:
+        radial-gradient(circle at 10% 8%, rgba(246, 173, 178, .35), transparent 18%),
+        radial-gradient(circle at 92% 10%, rgba(141, 205, 210, .42), transparent 20%),
+        radial-gradient(circle at 50% 98%, rgba(249, 220, 126, .28), transparent 22%),
+        #fff7e8;
+    }
+    .border {
+      position: absolute;
+      inset: 24px;
+      border: 5px solid #514638;
+      border-radius: 34px;
+      pointer-events: none;
+    }
+    header { text-align: center; position: relative; z-index: 1; }
+    .eyebrow {
+      color: #6d6255;
+      font-size: 34px;
+      font-weight: 900;
+      letter-spacing: .02em;
+    }
+    h1 {
+      margin: 14px 0 0;
+      font-size: 86px;
+      line-height: .96;
+      letter-spacing: -0.06em;
+      font-weight: 950;
+      color: #2f8b90;
+    }
+    h1 span { color: #e1685e; }
+    .sub {
+      display: inline-block;
+      margin-top: 22px;
+      padding: 14px 30px;
+      border: 4px solid #514638;
+      border-radius: 999px;
+      background: #f3a872;
+      color: #fffaf0;
+      font-size: 31px;
+      font-weight: 950;
+    }
+    .grid {
+      position: relative;
+      z-index: 1;
+      margin: 50px 36px 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .card {
+      min-height: 162px;
+      padding: 22px 24px;
+      border-radius: 28px;
+      background: rgba(255,255,248,.82);
+      box-shadow: 0 5px 0 rgba(81,70,56,.17);
+    }
+    .num {
+      display: inline-grid;
+      place-items: center;
+      width: 48px;
+      height: 48px;
+      margin-right: 12px;
+      border: 4px solid #665c4f;
+      border-radius: 50%;
+      background: #a7d9d6;
+      font-size: 30px;
+      font-weight: 950;
+      vertical-align: middle;
+    }
+    .card:nth-child(2n) .num { background: #f5c0c4; }
+    .card:nth-child(3n) .num { background: #f4cf77; }
+    .title {
+      display: inline;
+      font-size: 38px;
+      line-height: 1;
+      font-weight: 950;
+      vertical-align: middle;
+    }
+    .line {
+      margin-top: 14px;
+      font-size: 25px;
+      line-height: 1.18;
+      font-weight: 800;
+      color: #4d4438;
+    }
+    .footer {
+      position: absolute;
+      z-index: 1;
+      left: 100px;
+      right: 100px;
+      bottom: 54px;
+      text-align: center;
+      padding: 18px 24px;
+      border: 4px solid #514638;
+      border-radius: 999px;
+      background: #fffdf5;
+      font-size: 30px;
+      font-weight: 950;
+    }
+  </style>
+</head>
+<body>
+  <main class="pin">
+    <div class="border"></div>
+    <header>
+      <div class="eyebrow">Boundary Scripts</div>
+      <h1>9 Polite Ways<br>to Say <span>No</span><br>When Someone Asks<br>to Borrow Money</h1>
+      <div class="sub">Save this for awkward moments</div>
+    </header>
+    <section class="grid">
+      <div class="card"><span class="num">1</span><span class="title">Be kind</span><div class="line">“I understand, but I can’t help with money right now.”</div></div>
+      <div class="card"><span class="num">2</span><span class="title">Be clear</span><div class="line">“It’s not the amount. I’m not lending money out.”</div></div>
+      <div class="card"><span class="num">3</span><span class="title">Offer ideas</span><div class="line">“I can help you think through other options.”</div></div>
+      <div class="card"><span class="num">4</span><span class="title">End loops</span><div class="line">“I don’t want to keep discussing this.”</div></div>
+      <div class="card"><span class="num">5</span><span class="title">Protect peace</span><div class="line">Clear boundaries keep relationships from getting messy.</div></div>
+      <div class="card"><span class="num">✓</span><span class="title">Get 30</span><div class="line">Full script pack linked in the free guide.</div></div>
+    </section>
+    <div class="footer">Free guide: 30 money-boundary scripts</div>
+  </main>
+</body>
+</html>
+

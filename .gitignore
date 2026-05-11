@@ -5,3 +5,8 @@ node_modules
 *.db
 *.db-journal
 tsconfig.tsbuildinfo
+.DS_Store
+tmp/
+qrpay/.claude/
+qrpay/repos/
+qrpay/runtime/
