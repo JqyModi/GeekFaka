@@ -46,7 +46,18 @@ export async function GET(req: Request) {
     prisma.order.findMany({
       where,
       include: {
-        product: true
+        product: true,
+        supplierOrders: {
+          include: {
+            supplier: {
+              select: { name: true },
+            },
+            supplierProduct: {
+              select: { name: true, externalProductId: true },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        },
       },
       orderBy: { createdAt: "desc" },
       skip,

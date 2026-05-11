@@ -27,6 +27,18 @@ interface Order {
   product: {
     name: string
   }
+  supplierOrders?: {
+    id: string
+    status: string
+    externalOrderCode?: string | null
+    quantityRequested: number
+    quantityFulfilled: number
+    supplier: { name: string }
+    supplierProduct: {
+      name: string
+      externalProductId: string
+    }
+  }[]
 }
 
 interface Product {
@@ -160,6 +172,29 @@ export default function OrdersPage() {
     }
   }
 
+  const getSupplierOrderBadge = (order: Order) => {
+    const supplierOrder = order.supplierOrders?.[0]
+    if (!supplierOrder) return null
+
+    const variant = supplierOrder.status === "FULFILLED"
+      ? "secondary"
+      : supplierOrder.status === "PARTIAL"
+        ? "outline"
+        : "destructive"
+
+    return (
+      <div className="mt-1 space-y-1 text-xs">
+        <Badge variant={variant}>
+          {supplierOrder.supplier.name}: {supplierOrder.status}
+        </Badge>
+        <div className="text-muted-foreground">
+          交付 {supplierOrder.quantityFulfilled}/{supplierOrder.quantityRequested}
+          {supplierOrder.externalOrderCode ? ` · ${supplierOrder.externalOrderCode}` : ""}
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="space-y-6 h-full flex flex-col">
       <div className="flex flex-col gap-4 shrink-0">
@@ -253,6 +288,7 @@ export default function OrdersPage() {
                         {order.product.name}
                       </div>
                       <div className="text-xs text-muted-foreground">x{order.quantity}</div>
+                      {getSupplierOrderBadge(order)}
                     </TableCell>
                     <TableCell className="font-bold text-primary">
                       ¥{Number(order.totalAmount).toFixed(2)}
