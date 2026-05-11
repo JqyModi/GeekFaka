@@ -273,6 +273,8 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
 
   const isExpired = order.status === "EXPIRED" || (order.status === "PENDING" && new Date(order.createdAt).getTime() + 30 * 60 * 1000 < Date.now());
   const displayAmount = Number(payAmount || order.paymentAmount || order.totalAmount);
+  const deliveredQuantity = order.licenses.length;
+  const isPartiallyDelivered = order.status === "PAID" && deliveredQuantity < order.quantity;
 
   return (
     <div className="min-h-screen bg-background text-foreground pb-20">
@@ -340,6 +342,12 @@ export default function OrderPage({ params }: { params: { orderNo: string } }) {
                     <div className="h-1.5 w-1.5 rounded-full bg-green-500" />
                     <h3 className="font-bold text-lg">您的卡密信息</h3>
                  </div>
+                 {isPartiallyDelivered && (
+                   <div className="mb-4 rounded-xl border border-yellow-500/30 bg-yellow-500/10 p-4 text-sm text-yellow-200">
+                     本订单购买 {order.quantity} 个，当前已自动交付 {deliveredQuantity} 个。
+                     剩余 {order.quantity - deliveredQuantity} 个需补发或退款，请保留订单号并联系客服处理。
+                   </div>
+                 )}
                  <div className="space-y-4">
                    {order.licenses.map((license, index) => (
                      <LicenseItem 
