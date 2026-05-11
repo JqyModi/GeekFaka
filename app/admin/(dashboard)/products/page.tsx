@@ -38,6 +38,9 @@ interface Product {
   supplierName?: string | null
   supplierUrl?: string | null
   supplierNotes?: string | null
+  sourceType?: string | null
+  syncedStock?: number | null
+  safetyStock?: number | null
   _count: {
     licenses: number
   }
@@ -264,7 +267,12 @@ export default function ProductsPage() {
                   </TableCell>
                 </TableRow>
               ) : (
-                products.map((product) => (
+                products.map((product) => {
+                  const stock = product.sourceType === "SUPPLIER"
+                    ? Math.max(0, Number(product.syncedStock || 0) - Number(product.safetyStock || 0))
+                    : product._count.licenses
+
+                  return (
                   <TableRow key={product.id} className="hover:bg-muted/40 transition-colors h-24 group">
                     <TableCell className="py-4 relative">
                       {/* 侧边装饰条 */}
@@ -302,12 +310,15 @@ export default function ProductsPage() {
                     <TableCell>
                       <div className={cn(
                         "inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium border",
-                        product._count.licenses === 0 
+                        stock === 0 
                           ? "bg-destructive/10 text-destructive border-destructive/20" 
                           : "bg-green-500/10 text-green-500 border-green-500/20"
                       )}>
-                        {`库存: ${product._count.licenses}`}
+                        {`库存: ${stock}`}
                       </div>
+                      {product.sourceType === "SUPPLIER" && (
+                        <div className="mt-1 text-[10px] text-muted-foreground">上游同步库存</div>
+                      )}
                     </TableCell>
                     <TableCell>
                       <Switch 
@@ -350,7 +361,7 @@ export default function ProductsPage() {
                       </div>
                     </TableCell>
                   </TableRow>
-                ))
+                )})
               )}
             </TableBody>
           </Table>

@@ -2,6 +2,9 @@ import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { getPaymentAdapter } from "@/lib/payments/registry";
 import { logger } from "@/lib/logger";
+import { getSupplierAdapter } from "@/lib/suppliers/registry";
+import { calculateSalePrice } from "@/lib/suppliers/pricing";
+import { getSellableStock, getSupplierSellableStock } from "@/lib/suppliers/stock";
 
 const log = logger.child({ module: 'OrderCreate' });
 
@@ -60,6 +63,8 @@ export async function POST(req: Request) {
     const product = await prisma.product.findUnique({
       where: { id: productId },
       include: {
+        supplier: true,
+        supplierProduct: true,
         _count: {
           select: { licenses: { where: { status: "AVAILABLE" } } }
         }
@@ -71,9 +76,49 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Product not found" }, { status: 404 });
     }
 
-    if (product._count.licenses < quantity) {
-      log.warn({ productId, requested: quantity, available: product._count.licenses }, "Insufficient stock");
+    const localSellableStock = getSellableStock(product);
+    if (localSellableStock < quantity) {
+      log.warn({ productId, requested: quantity, available: localSellableStock }, "Insufficient stock");
       return NextResponse.json({ error: "Insufficient stock" }, { status: 400 });
+    }
+
+    if (product.sourceType === "SUPPLIER") {
+      if (!product.supplier || !product.supplierProduct || !product.supplier.enabled) {
+        log.warn({ productId }, "Supplier product is not purchasable");
+        return NextResponse.json({ error: "商品货源暂不可用" }, { status: 400 });
+      }
+
+      const adapter = getSupplierAdapter(product.supplier);
+      const upstreamProduct = await adapter.getProduct(product.supplierProduct.externalProductId);
+      const upstreamSellableStock = getSupplierSellableStock(upstreamProduct.stock, product.safetyStock);
+
+      const supplierUpdate: any = {
+        costPrice: upstreamProduct.costPrice,
+        syncedStock: upstreamProduct.stock,
+      };
+
+      if (product.autoSyncPrice && product.pricingMode === "MARKUP") {
+        const latestPrice = calculateSalePrice(upstreamProduct.costPrice, product, product.supplier);
+        supplierUpdate.price = latestPrice;
+
+        if (latestPrice !== Number(product.price)) {
+          await prisma.product.update({
+            where: { id: product.id },
+            data: supplierUpdate,
+          });
+          return NextResponse.json({ error: "商品价格已更新，请刷新页面后重试" }, { status: 409 });
+        }
+      } else if (Number(product.costPrice || 0) !== upstreamProduct.costPrice || product.syncedStock !== upstreamProduct.stock) {
+        await prisma.product.update({
+          where: { id: product.id },
+          data: supplierUpdate,
+        });
+      }
+
+      if (upstreamSellableStock < quantity) {
+        log.warn({ productId, requested: quantity, available: upstreamSellableStock }, "Insufficient supplier stock");
+        return NextResponse.json({ error: "上游库存不足，请刷新页面后重试" }, { status: 400 });
+      }
     }
 
     // 2. Handle Coupon

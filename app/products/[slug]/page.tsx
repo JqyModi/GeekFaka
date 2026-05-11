@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { prisma } from "@/lib/prisma"
 import { getPublicSiteConfig, stripMarkdown, toKeywordArray, truncateText } from "@/lib/site-config"
+import { getSellableStock } from "@/lib/suppliers/stock"
 
 interface ProductPageProps {
   params: {
@@ -78,7 +79,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound()
   }
 
-  const stock = product._count.licenses
+  const stock = getSellableStock(product)
   const keywords = toKeywordArray(product.searchKeywords)
   const description = product.seoDescription
     || truncateText(stripMarkdown(product.description || product.tagline || site.description))

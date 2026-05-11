@@ -5,6 +5,7 @@ import ReactMarkdown from "react-markdown";
 import { Announcement } from "@/components/announcement";
 import Link from "next/link";
 import { BookOpen, ChevronRight } from "lucide-react";
+import { getSellableStock } from "@/lib/suppliers/stock";
 
 export const dynamic = "force-dynamic";
 
@@ -57,7 +58,7 @@ export default async function Home() {
         tagline: p.tagline,
         description: p.description,
         price: p.price.toString(),
-        stock: p._count.licenses
+        stock: getSellableStock(p)
       }))
     })).filter((cat) => cat.products.length > 0);
   return (
