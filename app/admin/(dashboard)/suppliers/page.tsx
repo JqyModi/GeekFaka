@@ -24,6 +24,7 @@ interface Supplier {
   healthStatus: string
   balance?: string | null
   lastSyncAt?: string | null
+  apiKeyMasked?: string | null
   _count?: {
     products: number
     importedProducts: number
@@ -203,7 +204,10 @@ export default function SuppliersPage() {
                     <div className="mb-3 flex items-start justify-between gap-3">
                       <div className="min-w-0">
                         <div className="truncate text-base font-bold">{supplier.name}</div>
-                        <div className="truncate text-xs text-muted-foreground">{supplier.baseUrl}</div>
+                      <div className="truncate text-xs text-muted-foreground">{supplier.baseUrl}</div>
+                        {supplier.apiKeyMasked && (
+                          <div className="mt-1 text-[10px] text-muted-foreground">Key {supplier.apiKeyMasked}</div>
+                        )}
                       </div>
                       <Switch
                         checked={supplier.enabled}

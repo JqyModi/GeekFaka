@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { isAuthenticated } from "@/lib/auth"
+import { encryptSupplierSecret, maskSupplierSecret } from "@/lib/suppliers/secret"
+
+function serializeSupplier(supplier: any) {
+  return {
+    ...supplier,
+    apiKeyEncrypted: undefined,
+    apiKeyMasked: maskSupplierSecret(supplier.apiKeyEncrypted),
+  }
+}
 
 export async function PATCH(
   req: Request,
@@ -16,7 +25,11 @@ export async function PATCH(
         name: typeof body.name === "string" ? body.name.trim() : undefined,
         type: body.type,
         baseUrl: body.baseUrl,
-        apiKeyEncrypted: typeof body.apiKey !== "undefined" ? body.apiKey : body.apiKeyEncrypted,
+        apiKeyEncrypted: typeof body.apiKey !== "undefined"
+          ? encryptSupplierSecret(body.apiKey)
+          : typeof body.apiKeyEncrypted !== "undefined"
+            ? encryptSupplierSecret(body.apiKeyEncrypted)
+            : undefined,
         enabled: typeof body.enabled === "boolean" ? body.enabled : undefined,
         syncEnabled: typeof body.syncEnabled === "boolean" ? body.syncEnabled : undefined,
         markupRate: typeof body.markupRate === "undefined" ? undefined : Number(body.markupRate),
@@ -26,7 +39,7 @@ export async function PATCH(
       },
     })
 
-    return NextResponse.json(supplier)
+    return NextResponse.json(serializeSupplier(supplier))
   } catch (error) {
     return NextResponse.json({ error: "Failed to update supplier" }, { status: 500 })
   }

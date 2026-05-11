@@ -1,6 +1,15 @@
 import { NextResponse } from "next/server"
 import { prisma } from "@/lib/prisma"
 import { isAuthenticated } from "@/lib/auth"
+import { encryptSupplierSecret, maskSupplierSecret } from "@/lib/suppliers/secret"
+
+function serializeSupplier(supplier: any) {
+  return {
+    ...supplier,
+    apiKeyEncrypted: undefined,
+    apiKeyMasked: maskSupplierSecret(supplier.apiKeyEncrypted),
+  }
+}
 
 export async function GET() {
   if (!await isAuthenticated()) return new NextResponse("Unauthorized", { status: 401 })
@@ -17,7 +26,7 @@ export async function GET() {
     orderBy: { createdAt: "desc" },
   })
 
-  return NextResponse.json({ suppliers })
+  return NextResponse.json({ suppliers: suppliers.map(serializeSupplier) })
 }
 
 export async function POST(req: Request) {
@@ -30,7 +39,7 @@ export async function POST(req: Request) {
         name: String(body.name || "").trim(),
         type: body.type || "MMOSTORE247",
         baseUrl: body.baseUrl || "https://mmostore247.com/api/seller",
-        apiKeyEncrypted: body.apiKey || body.apiKeyEncrypted || null,
+        apiKeyEncrypted: encryptSupplierSecret(body.apiKey || body.apiKeyEncrypted),
         enabled: Boolean(body.enabled ?? true),
         syncEnabled: Boolean(body.syncEnabled ?? true),
         markupRate: Number(body.markupRate || 1.3),
@@ -40,7 +49,7 @@ export async function POST(req: Request) {
       },
     })
 
-    return NextResponse.json(supplier)
+    return NextResponse.json(serializeSupplier(supplier))
   } catch (error) {
     return NextResponse.json({ error: "Failed to create supplier" }, { status: 500 })
   }
