@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Download, Loader2, Plus, RefreshCw, Truck } from "lucide-react"
+import { Download, Edit2, Loader2, Plus, RefreshCw, Truck } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
@@ -68,6 +68,7 @@ export default function SuppliersPage() {
   const [syncingId, setSyncingId] = useState<string | null>(null)
   const [importingId, setImportingId] = useState<string | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null)
   const [formData, setFormData] = useState(defaultForm)
 
   useEffect(() => {
@@ -105,21 +106,52 @@ export default function SuppliersPage() {
     }
   }
 
-  const handleCreateSupplier = async (e: React.FormEvent) => {
+  const openCreateDialog = () => {
+    setEditingSupplier(null)
+    setFormData(defaultForm)
+    setDialogOpen(true)
+  }
+
+  const openEditDialog = (supplier: Supplier) => {
+    setEditingSupplier(supplier)
+    setFormData({
+      name: supplier.name,
+      type: supplier.type,
+      baseUrl: supplier.baseUrl,
+      apiKey: "",
+      markupRate: String(supplier.markupRate),
+      fixedFee: String(supplier.fixedFee),
+      safetyStock: String(supplier.safetyStock),
+      currency: supplier.currency,
+    })
+    setDialogOpen(true)
+  }
+
+  const handleSaveSupplier = async (e: React.FormEvent) => {
     e.preventDefault()
-    const res = await fetch("/api/admin/suppliers", {
-      method: "POST",
+    const payload: Record<string, string> = { ...formData }
+    if (editingSupplier && !payload.apiKey) {
+      delete payload.apiKey
+    }
+
+    const res = await fetch(editingSupplier ? `/api/admin/suppliers/${editingSupplier.id}` : "/api/admin/suppliers", {
+      method: editingSupplier ? "PATCH" : "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(formData),
+      body: JSON.stringify(payload),
     })
 
     if (res.ok) {
       setDialogOpen(false)
+      setEditingSupplier(null)
       setFormData(defaultForm)
       await fetchSuppliers()
+      if (editingSupplier) {
+        const updated = await res.json()
+        setSelectedSupplier((current) => current?.id === editingSupplier.id ? { ...current, ...updated } : current)
+      }
     } else {
       const data = await res.json()
-      alert(data.error || "创建货源失败")
+      alert(data.error || "保存货源失败")
     }
   }
 
@@ -172,7 +204,7 @@ export default function SuppliersPage() {
           <h1 className="text-3xl font-bold tracking-tight text-white">货源管理</h1>
           <p className="text-muted-foreground">配置上游 API，同步商品库存，并导入为平台商品</p>
         </div>
-        <Button onClick={() => setDialogOpen(true)}>
+        <Button onClick={openCreateDialog}>
           <Plus className="mr-2 h-4 w-4" />
           新增货源
         </Button>
@@ -209,11 +241,26 @@ export default function SuppliersPage() {
                           <div className="mt-1 text-[10px] text-muted-foreground">Key {supplier.apiKeyMasked}</div>
                         )}
                       </div>
-                      <Switch
-                        checked={supplier.enabled}
-                        onClick={(event) => event.stopPropagation()}
-                        onCheckedChange={() => handleToggleSupplier(supplier)}
-                      />
+                      <div className="flex items-center gap-2">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="icon"
+                          className="h-8 w-8"
+                          onClick={(event) => {
+                            event.stopPropagation()
+                            openEditDialog(supplier)
+                          }}
+                          title="编辑货源"
+                        >
+                          <Edit2 className="h-4 w-4" />
+                        </Button>
+                        <Switch
+                          checked={supplier.enabled}
+                          onClick={(event) => event.stopPropagation()}
+                          onCheckedChange={() => handleToggleSupplier(supplier)}
+                        />
+                      </div>
                     </div>
                     <div className="flex flex-wrap items-center gap-2 text-xs">
                       <Badge variant="outline">{supplier.type}</Badge>
@@ -330,10 +377,14 @@ export default function SuppliersPage() {
       <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
         <DialogContent className="sm:max-w-2xl">
           <DialogHeader>
-            <DialogTitle>新增货源</DialogTitle>
-            <DialogDescription>第一版支持 MMOStore247，后续供应商沿用同一配置模型。</DialogDescription>
+            <DialogTitle>{editingSupplier ? "编辑货源" : "新增货源"}</DialogTitle>
+            <DialogDescription>
+              {editingSupplier
+                ? "API Key 留空表示不修改；填写新 Key 会替换当前密钥。"
+                : "第一版支持 MMOStore247，后续供应商沿用同一配置模型。"}
+            </DialogDescription>
           </DialogHeader>
-          <form onSubmit={handleCreateSupplier} className="grid gap-4">
+          <form onSubmit={handleSaveSupplier} className="grid gap-4">
             <div className="grid gap-2">
               <Label htmlFor="name">名称</Label>
               <Input id="name" value={formData.name} onChange={(e) => setFormData({ ...formData, name: e.target.value })} required />
@@ -344,7 +395,13 @@ export default function SuppliersPage() {
             </div>
             <div className="grid gap-2">
               <Label htmlFor="apiKey">API Key</Label>
-              <Input id="apiKey" type="password" value={formData.apiKey} onChange={(e) => setFormData({ ...formData, apiKey: e.target.value })} />
+              <Input
+                id="apiKey"
+                type="password"
+                value={formData.apiKey}
+                onChange={(e) => setFormData({ ...formData, apiKey: e.target.value })}
+                placeholder={editingSupplier ? "留空表示不修改" : ""}
+              />
             </div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
               <div className="grid gap-2">
@@ -366,7 +423,7 @@ export default function SuppliersPage() {
             </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => setDialogOpen(false)}>取消</Button>
-              <Button type="submit">保存货源</Button>
+              <Button type="submit">{editingSupplier ? "保存修改" : "保存货源"}</Button>
             </DialogFooter>
           </form>
         </DialogContent>
