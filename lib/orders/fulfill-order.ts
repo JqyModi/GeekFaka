@@ -3,6 +3,7 @@ import { logger } from "@/lib/logger";
 import { sendOrderEmail } from "@/lib/mail";
 import { getSupplierAdapter } from "@/lib/suppliers/registry";
 import { getSupplierSellableStock } from "@/lib/suppliers/stock";
+import { getRealtimeSupplierProduct } from "@/lib/suppliers/realtime";
 import type { Prisma } from "@prisma/client";
 
 const log = logger.child({ module: "OrderFulfillment" });
@@ -119,7 +120,7 @@ async function fulfillSupplierOrder(
   const supplier = product.supplier;
   const supplierProduct = product.supplierProduct;
   const adapter = getSupplierAdapter(supplier);
-  const upstreamProduct = await adapter.getProduct(supplierProduct.externalProductId);
+  const upstreamProduct = await getRealtimeSupplierProduct(adapter, supplierProduct.externalProductId);
   const sellableStock = getSupplierSellableStock(upstreamProduct.stock, product.safetyStock);
 
   await prisma.product.update({

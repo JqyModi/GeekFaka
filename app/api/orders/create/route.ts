@@ -5,6 +5,7 @@ import { logger } from "@/lib/logger";
 import { getSupplierAdapter } from "@/lib/suppliers/registry";
 import { calculateSalePrice } from "@/lib/suppliers/pricing";
 import { getSellableStock, getSupplierSellableStock } from "@/lib/suppliers/stock";
+import { getRealtimeSupplierProduct } from "@/lib/suppliers/realtime";
 
 const log = logger.child({ module: 'OrderCreate' });
 
@@ -89,7 +90,7 @@ export async function POST(req: Request) {
       }
 
       const adapter = getSupplierAdapter(product.supplier);
-      const upstreamProduct = await adapter.getProduct(product.supplierProduct.externalProductId);
+      const upstreamProduct = await getRealtimeSupplierProduct(adapter, product.supplierProduct.externalProductId);
       const upstreamSellableStock = getSupplierSellableStock(upstreamProduct.stock, product.safetyStock);
 
       const supplierUpdate: any = {
