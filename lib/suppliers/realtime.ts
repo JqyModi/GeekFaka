@@ -2,7 +2,8 @@ import type { SupplierAdapter, SupplierProductSnapshot } from "@/lib/suppliers/t
 
 export async function getRealtimeSupplierProduct(
   adapter: SupplierAdapter,
-  externalProductId: string
+  externalProductId: string,
+  fallbackProduct?: SupplierProductSnapshot | null
 ): Promise<SupplierProductSnapshot> {
   const products = await adapter.listProducts()
   const listedProduct = products.find((product) => product.externalProductId === externalProductId)
@@ -11,6 +12,9 @@ export async function getRealtimeSupplierProduct(
     return listedProduct
   }
 
+  if (fallbackProduct && fallbackProduct.stock > 0) {
+    return fallbackProduct
+  }
+
   return adapter.getProduct(externalProductId)
 }
-

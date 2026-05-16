@@ -5,6 +5,7 @@ import { getSupplierAdapter } from "@/lib/suppliers/registry";
 import { getSupplierSellableStock } from "@/lib/suppliers/stock";
 import { getRealtimeSupplierProduct } from "@/lib/suppliers/realtime";
 import type { Prisma } from "@prisma/client";
+import type { SupplierProductSnapshot } from "@/lib/suppliers/types";
 
 const log = logger.child({ module: "OrderFulfillment" });
 
@@ -120,7 +121,21 @@ async function fulfillSupplierOrder(
   const supplier = product.supplier;
   const supplierProduct = product.supplierProduct;
   const adapter = getSupplierAdapter(supplier);
-  const upstreamProduct = await getRealtimeSupplierProduct(adapter, supplierProduct.externalProductId);
+  const fallbackSupplierProduct: SupplierProductSnapshot = {
+    externalProductId: supplierProduct.externalProductId,
+    name: supplierProduct.name,
+    description: supplierProduct.description,
+    costPrice: Number(supplierProduct.costPrice),
+    currency: supplierProduct.currency,
+    stock: supplierProduct.stock,
+    status: supplierProduct.status,
+    raw: supplierProduct.rawJson ? JSON.parse(supplierProduct.rawJson) : supplierProduct,
+  };
+  const upstreamProduct = await getRealtimeSupplierProduct(
+    adapter,
+    supplierProduct.externalProductId,
+    fallbackSupplierProduct
+  );
   const sellableStock = getSupplierSellableStock(upstreamProduct.stock, product.safetyStock);
 
   await prisma.product.update({

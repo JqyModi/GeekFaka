@@ -6,6 +6,7 @@ import { getSupplierAdapter } from "@/lib/suppliers/registry";
 import { calculateSalePrice } from "@/lib/suppliers/pricing";
 import { getSellableStock, getSupplierSellableStock } from "@/lib/suppliers/stock";
 import { getRealtimeSupplierProduct } from "@/lib/suppliers/realtime";
+import type { SupplierProductSnapshot } from "@/lib/suppliers/types";
 
 const log = logger.child({ module: 'OrderCreate' });
 
@@ -90,7 +91,21 @@ export async function POST(req: Request) {
       }
 
       const adapter = getSupplierAdapter(product.supplier);
-      const upstreamProduct = await getRealtimeSupplierProduct(adapter, product.supplierProduct.externalProductId);
+      const fallbackSupplierProduct: SupplierProductSnapshot = {
+        externalProductId: product.supplierProduct.externalProductId,
+        name: product.supplierProduct.name,
+        description: product.supplierProduct.description,
+        costPrice: Number(product.supplierProduct.costPrice),
+        currency: product.supplierProduct.currency,
+        stock: product.supplierProduct.stock,
+        status: product.supplierProduct.status,
+        raw: product.supplierProduct.rawJson ? JSON.parse(product.supplierProduct.rawJson) : product.supplierProduct,
+      };
+      const upstreamProduct = await getRealtimeSupplierProduct(
+        adapter,
+        product.supplierProduct.externalProductId,
+        fallbackSupplierProduct
+      );
       const upstreamSellableStock = getSupplierSellableStock(upstreamProduct.stock, product.safetyStock);
 
       const supplierUpdate: any = {
