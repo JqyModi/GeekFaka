@@ -287,7 +287,7 @@ export default function SuppliersPage() {
               </h2>
               {selectedSupplier && (
                 <p className="mt-1 text-sm text-muted-foreground">
-                  加价倍率 {Number(selectedSupplier.markupRate).toFixed(2)} + 固定服务费 {Number(selectedSupplier.fixedFee).toFixed(2)}，安全库存 {selectedSupplier.safetyStock}
+                  加价倍率 {Number(selectedSupplier.markupRate).toFixed(2)} + 固定服务费 ¥{Number(selectedSupplier.fixedFee).toFixed(2)}，安全库存 {selectedSupplier.safetyStock}
                 </p>
               )}
             </div>
@@ -409,7 +409,7 @@ export default function SuppliersPage() {
                 <Input id="markupRate" type="number" step="0.01" value={formData.markupRate} onChange={(e) => setFormData({ ...formData, markupRate: e.target.value })} />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="fixedFee">固定服务费</Label>
+                <Label htmlFor="fixedFee">固定服务费（元）</Label>
                 <Input id="fixedFee" type="number" step="0.01" value={formData.fixedFee} onChange={(e) => setFormData({ ...formData, fixedFee: e.target.value })} />
               </div>
               <div className="grid gap-2">

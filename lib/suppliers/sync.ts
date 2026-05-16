@@ -62,7 +62,7 @@ export async function syncSupplierProducts(supplierId: string) {
           costPrice: snapshot.costPrice,
           syncedStock: snapshot.stock,
           price: imported.autoSyncPrice && imported.pricingMode === "MARKUP"
-            ? calculateSalePrice(snapshot.costPrice, imported, supplier)
+            ? calculateSalePrice(snapshot.costPrice, { ...imported, currency: snapshot.currency }, supplier)
             : undefined,
           isActive: imported.autoSyncStock
             ? snapshot.status !== "ERROR"
@@ -89,4 +89,3 @@ export async function syncSupplierProducts(supplierId: string) {
     balance: balance?.balance,
   }
 }
-

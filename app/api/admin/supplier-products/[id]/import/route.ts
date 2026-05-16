@@ -40,7 +40,7 @@ export async function POST(
     const fixedFee = Number(body.fixedFee ?? supplierProduct.supplier.fixedFee)
     const price = calculateSalePrice(
       supplierProduct.costPrice,
-      { markupRate, fixedFee },
+      { markupRate, fixedFee, currency: supplierProduct.currency },
       supplierProduct.supplier
     )
 

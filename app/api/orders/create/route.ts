@@ -99,7 +99,11 @@ export async function POST(req: Request) {
       };
 
       if (product.autoSyncPrice && product.pricingMode === "MARKUP") {
-        const latestPrice = calculateSalePrice(upstreamProduct.costPrice, product, product.supplier);
+        const latestPrice = calculateSalePrice(
+          upstreamProduct.costPrice,
+          { ...product, currency: upstreamProduct.currency },
+          product.supplier
+        );
         supplierUpdate.price = latestPrice;
 
         if (latestPrice !== Number(product.price)) {
