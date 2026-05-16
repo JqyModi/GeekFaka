@@ -158,7 +158,7 @@ export class Mmostore247Adapter implements SupplierAdapter {
 
     return {
       externalProductId,
-      name: String(product?.product_name || product?.name || externalProductId),
+      name: String(product?.product_name_zh || product?.product_name || product?.name || externalProductId),
       description: product?.description ? String(product.description) : null,
       costPrice: Number.isFinite(costPrice) ? costPrice : 0,
       currency: String(product?.currency || fallbackCurrency || this.currency),

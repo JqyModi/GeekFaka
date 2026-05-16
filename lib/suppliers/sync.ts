@@ -59,6 +59,7 @@ export async function syncSupplierProducts(supplierId: string) {
       await prisma.product.update({
         where: { id: imported.id },
         data: {
+          name: snapshot.name,
           costPrice: snapshot.costPrice,
           syncedStock: snapshot.stock,
           price: imported.autoSyncPrice && imported.pricingMode === "MARKUP"
