@@ -51,6 +51,28 @@ export class Mmostore247Adapter implements SupplierAdapter {
   }
 
   async purchase(input: SupplierPurchaseInput): Promise<SupplierPurchaseResult> {
+    if (process.env.SUPPLIER_PURCHASE_DRY_RUN === "true") {
+      const codes = Array.from({ length: input.quantity }, (_, index) => {
+        const sequence = String(index + 1).padStart(2, "0")
+        return `dryrun-${input.externalProductId}-${Date.now()}-${sequence}`
+      })
+      const raw = {
+        success: true,
+        status: "fulfilled",
+        order_code: `DRYRUN-${Date.now()}`,
+        quantity: input.quantity,
+        deliveredAccounts: codes,
+        product: { _id: input.externalProductId },
+      }
+
+      return {
+        externalOrderCode: raw.order_code,
+        quantityFulfilled: input.quantity,
+        codes,
+        raw,
+      }
+    }
+
     const raw = await this.request("/purchase", {
       method: "POST",
       currency: true,

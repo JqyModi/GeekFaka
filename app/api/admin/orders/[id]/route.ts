@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { isAuthenticated } from "@/lib/auth";
-import { sendOrderEmail } from "@/lib/mail";
+import { fulfillPaidOrder } from "@/lib/orders/fulfill-order";
 
 // Manual Actions (e.g., Mark as Paid)
 export async function PATCH(
@@ -23,41 +23,9 @@ export async function PATCH(
     if (action === "MARK_PAID") {
        if (order.status === "PAID") return NextResponse.json({ error: "Already paid" }, { status: 400 });
 
-       // Transactional manual fulfillment
-       await prisma.$transaction(async (tx) => {
-         
-         // Standard Stock Logic
-         const licenses = await tx.license.findMany({
-           where: { productId: order.productId, status: "AVAILABLE" },
-           orderBy: { createdAt: 'asc' }, // FIFO: Use oldest licenses first
-           take: order.quantity
-         });
+       const result = await fulfillPaidOrder(order.orderNo, "manual");
 
-         if (licenses.length < order.quantity) {
-           throw new Error("Insufficient stock to fulfill manually");
-         }
-
-         const licenseIds = licenses.map(l => l.id);
-         await tx.license.updateMany({
-           where: { id: { in: licenseIds } },
-           data: { status: "SOLD", orderId: order.id }
-         });
-
-         // Update Order
-         await tx.order.update({
-           where: { id },
-           data: { 
-             status: "PAID", 
-             paidAt: new Date(),
-             paymentMethod: "manual"
-           }
-         });
-       });
-
-       // Trigger email notification in background
-       sendOrderEmail(order.orderNo).catch(console.error);
-
-       return NextResponse.json({ success: true });
+       return NextResponse.json({ success: true, result });
     }
 
     return NextResponse.json({ error: "Invalid action" }, { status: 400 });
