@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { Save, Loader2, ShieldCheck, CreditCard, Settings, CheckCircle2, Wallet } from "lucide-react"
+import { Save, Loader2, ShieldCheck, CreditCard, Settings, CheckCircle2, Wallet, TestTube2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -140,10 +140,11 @@ export default function SettingsPage() {
       </div>
 
       <Tabs defaultValue="payment" className="w-full">
-        <TabsList className="grid w-full grid-cols-3 lg:w-[600px]">
+        <TabsList className="grid w-full grid-cols-4 lg:w-[760px]">
           <TabsTrigger value="payment">支付渠道</TabsTrigger>
           <TabsTrigger value="site">站点设置</TabsTrigger>
           <TabsTrigger value="email">邮件通知</TabsTrigger>
+          <TabsTrigger value="supplier">货源测试</TabsTrigger>
         </TabsList>
         
         <TabsContent value="payment" className="space-y-4 mt-6">
@@ -308,6 +309,50 @@ export default function SettingsPage() {
                 <p className="text-xs text-muted-foreground">
                   设置新密码后，下次登录生效。若留空则保持当前密码不变。
                 </p>
+              </div>
+            </CardContent>
+            <CardFooter>
+              <Button onClick={handleSave} disabled={saving}>
+                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                保存配置
+              </Button>
+            </CardFooter>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="supplier" className="mt-6">
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex items-center gap-2">
+                <TestTube2 className="h-5 w-5" />
+                货源测试模式
+              </CardTitle>
+              <CardDescription>
+                开启后，支付成功仍会进入自动履约流程，但上游采购会生成模拟卡密，不会真实扣减货源余额。
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="space-y-6">
+              <div className="flex items-center justify-between rounded-lg border p-4 bg-muted/20">
+                <div className="space-y-0.5">
+                  <div className="flex items-center gap-2">
+                    <Label className="text-base">上游采购 dry-run</Label>
+                    {draftConfig.supplier_purchase_dry_run === "true" && (
+                      <Badge variant="secondary" className="border-yellow-500/60 text-yellow-500">
+                        测试中
+                      </Badge>
+                    )}
+                  </div>
+                  <p className="text-xs text-muted-foreground">
+                    用于线上验证支付回调、订单改为已支付、供应商履约和卡密展示链路。正式售卖前请关闭。
+                  </p>
+                </div>
+                <Switch
+                  checked={draftConfig.supplier_purchase_dry_run === "true"}
+                  onCheckedChange={(checked) => handleChange("supplier_purchase_dry_run", String(checked))}
+                />
+              </div>
+              <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-4 text-sm text-yellow-200">
+                环境变量 SUPPLIER_PURCHASE_DRY_RUN=true 仍会强制开启测试模式；后台关闭后，如果环境变量仍为 true，采购仍不会请求上游。
               </div>
             </CardContent>
             <CardFooter>

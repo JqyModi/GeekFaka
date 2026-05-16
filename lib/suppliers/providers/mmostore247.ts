@@ -8,6 +8,7 @@ import type {
   SupplierPurchaseInput,
   SupplierPurchaseResult,
 } from "@/lib/suppliers/types"
+import { isSupplierPurchaseDryRunEnabled } from "@/lib/suppliers/settings"
 
 type JsonRecord = Record<string, any>
 
@@ -51,7 +52,7 @@ export class Mmostore247Adapter implements SupplierAdapter {
   }
 
   async purchase(input: SupplierPurchaseInput): Promise<SupplierPurchaseResult> {
-    if (process.env.SUPPLIER_PURCHASE_DRY_RUN === "true") {
+    if (await isSupplierPurchaseDryRunEnabled()) {
       const codes = Array.from({ length: input.quantity }, (_, index) => {
         const sequence = String(index + 1).padStart(2, "0")
         return `dryrun-${input.externalProductId}-${Date.now()}-${sequence}`
