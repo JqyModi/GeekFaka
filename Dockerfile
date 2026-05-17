@@ -15,9 +15,12 @@ COPY . .
 # [NEW] Perform MySQL transformation during build time
 RUN if grep -q 'provider = "sqlite"' prisma/schema.prisma; then \
     sed -i 's/provider = "sqlite"/provider = "mysql"/g' prisma/schema.prisma && \
-    sed -i 's/\(description[[:space:]]\+String?\)/\1 @db.LongText/g' prisma/schema.prisma && \
-    sed -i 's/\(value[[:space:]]\+String\)/\1 @db.LongText/g' prisma/schema.prisma && \
-    sed -i 's/\(content[[:space:]]\+String?\)/\1 @db.LongText/g' prisma/schema.prisma; \
+    sed -i -E 's/(description[[:space:]]+String\?)/\1 @db.LongText/g' prisma/schema.prisma && \
+    sed -i -E 's/(value[[:space:]]+String)/\1 @db.LongText/g' prisma/schema.prisma && \
+    sed -i -E 's/(metadataJson[[:space:]]+String\?)/\1 @db.LongText/g' prisma/schema.prisma && \
+    sed -i -E 's/(rawJson[[:space:]]+String\?)/\1 @db.LongText/g' prisma/schema.prisma && \
+    sed -i -E 's/(rawResponse[[:space:]]+String\?)/\1 @db.LongText/g' prisma/schema.prisma && \
+    sed -i -E 's/(content[[:space:]]+String\?)/\1 @db.LongText/g' prisma/schema.prisma; \
     fi
 
 # Ensure openssl is available for Prisma generation and build
